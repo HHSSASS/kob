@@ -1,8 +1,8 @@
 <template>
-<div>
-<div>Bot昵称：{{bot_name}}</div>
-<div>Bot战力：{{bot_rating}}</div>
-</div>
+  <div>
+  <div>Bot昵称：{{bot_name}}</div>
+  <div>Bot战力：{{bot_rating}}</div>
+  </div>
   <router-view/>
 </template>
 
