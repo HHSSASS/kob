@@ -15,11 +15,12 @@ export default{
   },
   setup(){
     $.ajax({
-      url:"http://127.0.0.1:3000/user/account/token/",
+      url:"http://127.0.0.1:3000/user/account/register/",
       type:"post",
       data:{
-        username:'HH',
-        password:'123456',
+        username:'b',
+        password:'pb',
+        confirmPassword:'pb',
       },
       success(resp){
         console.log(resp);
