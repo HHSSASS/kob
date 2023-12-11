@@ -34,6 +34,10 @@ public class RegisterServiceImpl implements RegisterService {
             map.put("message", "密码不能为空");
             return map;
         }
+        if(password.length()==0||confirmPassword.length()==0){
+            map.put("message", "密码不能为空");
+            return map;
+        }
         if(!password.equals(confirmPassword)){
             map.put("message","两次输入的密码不一致");
             return map;
