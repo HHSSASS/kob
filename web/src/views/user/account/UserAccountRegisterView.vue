@@ -58,9 +58,6 @@ export default{
                         message.value=resp.message;
                     }
                 },
-                error(resp){
-                    console.log(resp);
-                }
             })
         }
         return{
