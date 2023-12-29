@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.utils.Game;
 import com.kob.backend.consumer.utils.JwtAuthentication;
+import com.kob.backend.mapper.RecordMapper;
 import com.kob.backend.mapper.UserMapper;
 import com.kob.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,21 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 @ServerEndpoint("/websocket/{token}")  // 注意不要以'/'结尾
 public class WebSocketServer {
-    final static ConcurrentHashMap<Integer,WebSocketServer> users=new ConcurrentHashMap<>();
-    final static CopyOnWriteArraySet<User> matchpool=new CopyOnWriteArraySet<>();
+    final public static ConcurrentHashMap<Integer,WebSocketServer> users=new ConcurrentHashMap<>();
+    final private static CopyOnWriteArraySet<User> matchpool=new CopyOnWriteArraySet<>();
     private Session session=null;
     private User user;
     private static UserMapper userMapper;
+    public static RecordMapper recordMapper;
+    private Game game=null;
+
     @Autowired
     public void setUserMapper(UserMapper userMapper){
         WebSocketServer.userMapper=userMapper;
+    }
+    @Autowired
+    public void setRecordMapper(RecordMapper recordMapper){
+        WebSocketServer.recordMapper=recordMapper;
     }
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
@@ -63,6 +71,10 @@ public class WebSocketServer {
 
             Game game=new Game(13,14,20,a.getId(),b.getId());
             game.createMap();
+            users.get(a.getId()).game=game;
+            users.get(b.getId()).game=game;
+            game.start();
+
             JSONObject respGame=new JSONObject();
             respGame.put("a_id",game.getPlayerA().getId());
             respGame.put("a_sx",game.getPlayerA().getSx());
@@ -90,6 +102,13 @@ public class WebSocketServer {
         System.out.println("stopmatching!");
         matchpool.remove(this.user);
     }
+    private void move(int direction){
+        if(game.getPlayerA().getId().equals(user.getId())){
+            game.setNextStepA(direction);
+        } else if(game.getPlayerB().getId().equals(user.getId())){
+            game.setNextStepB(direction);
+        }
+    }
     @OnMessage
     public void onMessage(String message, Session session) {
         System.out.println("receive message!");
@@ -97,9 +116,10 @@ public class WebSocketServer {
         String event=data.getString("event");
         if("start-matching".equals(event)){
             startMatching();
-        }
-        else if("stop-matching".equals(event)){
+        } else if("stop-matching".equals(event)){
             stopMatching();
+        } else if("move".equals(event)){
+            move(data.getInteger("direction"));
         }
     }
 
@@ -112,8 +132,7 @@ public class WebSocketServer {
         synchronized (this.session){
             try {
                 this.session.getBasicRemote().sendText(message);
-            }
-            catch (IOException e){
+            } catch (IOException e){
                 e.printStackTrace();
             }
         }
