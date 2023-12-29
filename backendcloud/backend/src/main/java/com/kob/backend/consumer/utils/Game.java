@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Game extends Thread{
-    private final Integer rows,cols;
+    final Integer rows,cols;
     private final Integer inner_walls_count;
     private final int[][] g;
     private final static int[] dx={-1,0,1,0},dy={0,1,0,-1};
@@ -49,6 +49,7 @@ public class Game extends Thread{
                 return true;
             }
         }
+        g[sx][sy]=0;
         return false;
     }
     public boolean draw(){

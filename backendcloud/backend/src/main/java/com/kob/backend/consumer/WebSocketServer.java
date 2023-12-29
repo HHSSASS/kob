@@ -17,9 +17,11 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 @ServerEndpoint("/websocket/{token}")  // 注意不要以'/'结尾
@@ -31,6 +33,9 @@ public class WebSocketServer {
     public static RecordMapper recordMapper;
     private static RestTemplate restTemplate;
     private Game game=null;
+
+    private boolean is_connected=false;
+    private ReentrantLock lock=new ReentrantLock();
 
     @Autowired
     public void setUserMapper(UserMapper userMapper){
@@ -55,7 +60,54 @@ public class WebSocketServer {
         }
         else{
             this.session.close();
+            return;
         }
+        new Thread(){
+            @Override
+            public void run() {
+                while(true){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    JSONObject resp=new JSONObject();
+                    resp.put("event","heartbeat");
+                    if(users.get(user.getId())!=null) {
+                        sendMessage(resp.toJSONString());
+                    }
+                    else {
+                        System.out.println("heartbeatbreak!");
+                        break;
+                    }
+                }
+            }
+        }.start();
+        new Thread(){
+            @Override
+            public void run() {
+                while(true){
+                    try {
+                        Thread.sleep(5000);
+                        lock.lock();
+                        if(is_connected==false) {
+                            System.out.println("heartbeatdisconnected!");
+                            if(session!=null)
+                                session.close();
+                            else if (user != null) {
+                                users.remove(user.getId());
+                            }
+                            break;
+                        }
+                        else is_connected=false;
+                    } catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }finally {
+                        lock.unlock();
+                    }
+                }
+            }
+        }.start();
     }
 
     @OnClose
@@ -64,6 +116,9 @@ public class WebSocketServer {
         if (this.user != null) {
             users.remove(this.user.getId());
         }
+        MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
+        data.add("user_id",this.user.getId().toString());
+        restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
     }
     public static void startGame(Integer aId,Integer bId){
         User a=userMapper.selectById(aId),b=userMapper.selectById(bId);
@@ -131,6 +186,14 @@ public class WebSocketServer {
             stopMatching();
         } else if("move".equals(event)){
             move(data.getInteger("direction"));
+        } else if("heartbeat".equals(event)){
+            try {
+                lock.lock();
+                System.out.println("heartbeat");
+                is_connected=true;
+            }finally {
+                lock.unlock();
+            }
         }
     }
 
@@ -142,7 +205,8 @@ public class WebSocketServer {
     public void sendMessage(String message){
         synchronized (this.session){
             try {
-                this.session.getBasicRemote().sendText(message);
+                if(this.session!=null)
+                    this.session.getBasicRemote().sendText(message);
             } catch (IOException e){
                 e.printStackTrace();
             }

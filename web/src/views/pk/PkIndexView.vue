@@ -49,14 +49,21 @@ export default{
                     snake1.set_direction(data.b_direction);
                 }else if(data.event==="result"){
                     const game=store.state.pk.gameObject;
-                    const [snake0,snake1]=game.snakes;
-                    if(data.winner==="all"||data.winner==="B"){
-                        snake0.status="die";
+                    if(game!=null){
+                        const [snake0,snake1]=game.snakes;
+                        if(data.winner==="all"||data.winner==="B"){
+                            snake0.status="die";
+                        }
+                        if(data.winner==="all"||data.winner==="A"){
+                            snake1.status="die";
+                        }
+                        store.commit("updateWinner",data.winner);
                     }
-                    if(data.winner==="all"||data.winner==="A"){
-                        snake1.status="die";
-                    }
-                    store.commit("updateWinner",data.winner);
+                }else if(data.event==="heartbeat"){
+                    console.log(data);
+                     socket.send(JSON.stringify({
+                         event:"heartbeat",
+                     }))
                 }
             }
             socket.onclose=()=>{
