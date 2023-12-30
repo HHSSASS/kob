@@ -2,6 +2,7 @@ package com.kob.backend.consumer.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.WebSocketServer;
+import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.Record;
 
 import java.util.ArrayList;
@@ -21,13 +22,25 @@ public class Game extends Thread{
     private String status="playing";//playing->finished
     private String winner="";//all平局;A;B
 
-    public Game(Integer rows, Integer cols, Integer inner_walls_count,Integer idA,Integer idB) {
+    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB,Bot botB) {
         this.rows = rows;
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
         this.g = new int[rows][cols];
-        playerA =new Player(idA,rows-2,1,new ArrayList<>());
-        playerB =new Player(idB,1,cols-2,new ArrayList<>());
+
+        Integer botIdA=-1,botIdB=-1;
+        String botCodeA="",botCodeB="";
+        if(botA!=null){
+            botIdA=botA.getId();
+            botCodeA=botA.getContent();
+        }
+        if(botB!=null){
+            botIdB=botB.getId();
+            botCodeB=botB.getContent();
+        }
+
+        playerA =new Player(idA,botIdA,botCodeA,rows-2,1,new ArrayList<>());
+        playerB =new Player(idB,botIdB,botCodeB,1,cols-2,new ArrayList<>());
     }
     public Player getPlayerA(){
         return playerA;
@@ -107,6 +120,7 @@ public class Game extends Thread{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
         for(int i=0;i<50;++i){
             try{
                 Thread.sleep(100);

@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.utils.Game;
 import com.kob.backend.consumer.utils.JwtAuthentication;
+import com.kob.backend.mapper.BotMapper;
 import com.kob.backend.mapper.RecordMapper;
 import com.kob.backend.mapper.UserMapper;
+import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,7 @@ public class WebSocketServer {
     private User user;
     private static UserMapper userMapper;
     public static RecordMapper recordMapper;
+    private static BotMapper botMapper;
     private static RestTemplate restTemplate;
     private Game game=null;
 
@@ -44,6 +47,10 @@ public class WebSocketServer {
     @Autowired
     public void setRecordMapper(RecordMapper recordMapper){
         WebSocketServer.recordMapper=recordMapper;
+    }
+    @Autowired
+    public void setBotMapper(BotMapper botMapper){
+        WebSocketServer.botMapper=botMapper;
     }
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate){
@@ -120,10 +127,11 @@ public class WebSocketServer {
         data.add("user_id",this.user.getId().toString());
         restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
     }
-    public static void startGame(Integer aId,Integer bId){
+    public static void startGame(Integer aId,Integer aBotId,Integer bId,Integer bBotId){
         User a=userMapper.selectById(aId),b=userMapper.selectById(bId);
+        Bot botA=botMapper.selectById(aBotId),botB=botMapper.selectById(bBotId);
 
-        Game game=new Game(13,14,20,a.getId(),b.getId());
+        Game game=new Game(13,14,20,a.getId(),botA,b.getId(),botB);
         game.createMap();
         if(users.get(a.getId())!=null)
             users.get(a.getId()).game=game;
@@ -155,11 +163,12 @@ public class WebSocketServer {
         if(users.get(b.getId())!=null)
             users.get(b.getId()).sendMessage(respB.toJSONString());
     }
-    private void startMatching(){
+    private void startMatching(Integer botId){
         System.out.println("startmathcing!");
         MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
         data.add("rating",this.user.getRating().toString());
+        data.add("bot_id",botId.toString());
         restTemplate.postForObject("http://127.0.0.1:3001/player/add/",data,String.class);
     }
     private void stopMatching(){
@@ -181,7 +190,7 @@ public class WebSocketServer {
         JSONObject data= JSON.parseObject(message);
         String event=data.getString("event");
         if("start-matching".equals(event)){
-            startMatching();
+            startMatching(data.getInteger("bot_id"));
         } else if("stop-matching".equals(event)){
             stopMatching();
         } else if("move".equals(event)){
