@@ -21,6 +21,7 @@ export default{
         const store=useStore();
         const socketurl=`ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
         let socket=null;
+        store.commit("updateWinner","none");
         onMounted(()=>{
             store.commit("updateOpponent",{
                 username:"我的对手",

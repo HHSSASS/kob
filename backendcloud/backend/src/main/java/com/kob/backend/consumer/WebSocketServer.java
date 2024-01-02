@@ -34,8 +34,8 @@ public class WebSocketServer {
     private static UserMapper userMapper;
     public static RecordMapper recordMapper;
     private static BotMapper botMapper;
-    private static RestTemplate restTemplate;
-    private Game game=null;
+    public static RestTemplate restTemplate;
+    public Game game=null;
 
     private boolean is_connected=false;
     private ReentrantLock lock=new ReentrantLock();
@@ -179,9 +179,11 @@ public class WebSocketServer {
     }
     private void move(int direction){
         if(game.getPlayerA().getId().equals(user.getId())){
-            game.setNextStepA(direction);
+            if(game.getPlayerA().getBotId().equals(-1))
+                game.setNextStepA(direction);
         } else if(game.getPlayerB().getId().equals(user.getId())){
-            game.setNextStepB(direction);
+            if(game.getPlayerB().getBotId().equals(-1))
+                game.setNextStepB(direction);
         }
     }
     @OnMessage

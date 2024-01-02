@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.WebSocketServer;
 import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.Record;
+import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,12 +117,41 @@ public class Game extends Thread{
             lock.unlock();
         }
     }
+    private String getInput(Player player){
+        Player me,you;
+        if(playerA.getId().equals(player.getId())){
+            me=playerA;
+            you=playerB;
+        }else{
+            me=playerB;
+            you=playerA;
+        }
+        return getMapString()+"#"+
+                me.getSx()+"#"+
+                me.getSy()+"#("+
+                me.getStepsString()+")#"+
+                you.getSx()+"#"+
+                you.getSy()+"#("+
+                you.getStepsString()+")";
+    }
+    private void sendBotCode(Player player){
+        if(player.getBotId().equals(-1)) return;
+
+        MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
+        data.add("user_id",player.getId().toString());
+        data.add("bot_code",player.getBotCode());
+        data.add("input",getInput(player));
+        WebSocketServer.restTemplate.postForObject("http://127.0.0.1:3002/bot/add/",data,String.class);
+    }
     private boolean nextStep(){//等待两名玩家下一步操作
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        sendBotCode(playerA);
+        sendBotCode(playerB);
 
         for(int i=0;i<50;++i){
             try{
