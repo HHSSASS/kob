@@ -22,6 +22,7 @@ export default{
         const socketurl=`ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
         let socket=null;
         store.commit("updateWinner","none");
+        store.commit("updateIsRecord",false);
         onMounted(()=>{
             store.commit("updateOpponent",{
                 username:"我的对手",

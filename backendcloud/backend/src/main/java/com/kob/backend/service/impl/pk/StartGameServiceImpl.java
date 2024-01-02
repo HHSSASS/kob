@@ -10,6 +10,6 @@ public class StartGameServiceImpl implements StartGameService {
     public String startGame(Integer aId, Integer aBotId,Integer bId,Integer bBotId) {
         System.out.println("startgame "+aId+" "+bId);
         WebSocketServer.startGame(aId,aBotId,bId,bBotId);
-        return null;
+        return "start game successfully";
     }
 }
