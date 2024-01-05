@@ -12,8 +12,20 @@
                         <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
                     </div>
                     <div class="error-message">{{message}}</div>
-                    <button type="submit" class="btn btn-primary">提交</button>
+                    <div @click="register" class="register">还没有账号？立即注册！</div>
+                    <button type="submit" class="btn btn-primary">登录</button>
                 </form>
+                <div class="oauth">
+                    <div>一键注册登录:</div>
+                    &nbsp;
+                    <div style="cursor: pointer;">
+                        <img width="30" src="https://cdn.luogu.com.cn/upload/image_hosting/jvmtthfg.png" alt="">
+                    </div>
+                    &nbsp;
+                    <div style="cursor: pointer;">
+                        <img width="28" src="https://cdn.luogu.com.cn/upload/image_hosting/8vl3e7h4.png" alt="">
+                    </div>
+                </div>
             </div>
         </div>
     </ContentField>
@@ -66,11 +78,15 @@ export default{
                 }
              })
         }
+        const register=()=>{
+            router.push({name:'user_account_register'});
+        }
         return{
             username,
             password,
             message,
             login,
+            register,
         }
     }
 }
@@ -82,5 +98,14 @@ button{
 }
 div.error-message{
     color:red;
+}
+div.register{
+    color:blue;
+    cursor: pointer;
+}
+div.oauth{
+    display: flex;
+    text-align: center; 
+    margin-top: 20px; 
 }
 </style>

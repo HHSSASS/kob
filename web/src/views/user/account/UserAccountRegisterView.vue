@@ -16,7 +16,7 @@
                         <input v-model="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="请再次输入密码">
                     </div>
                     <div class="error-message">{{message}}</div>
-                    <button type="submit" class="btn btn-primary">提交</button>
+                    <button type="submit" class="btn btn-primary">注册</button>
                 </form>
             </div>
         </div>

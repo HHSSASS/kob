@@ -137,7 +137,6 @@ public class WebSocketServer {
             users.get(a.getId()).game=game;
         if(users.get(b.getId())!=null)
             users.get(b.getId()).game=game;
-        game.start();
 
         JSONObject respGame=new JSONObject();
         respGame.put("a_id",game.getPlayerA().getId());
@@ -162,6 +161,39 @@ public class WebSocketServer {
         respB.put("game",respGame);
         if(users.get(b.getId())!=null)
             users.get(b.getId()).sendMessage(respB.toJSONString());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        game.start();
+    }
+    public static void startpveGame(Integer Id,Integer BotId){
+        User a=userMapper.selectById(Id);
+        Bot bot=botMapper.selectById(BotId);
+
+        Game game=new Game(13,14,20,a.getId(),bot,0,null);
+        game.createMap();
+        if(users.get(a.getId())!=null)
+            users.get(a.getId()).game=game;
+
+        JSONObject respGame=new JSONObject();
+        respGame.put("a_id",game.getPlayerA().getId());
+        respGame.put("a_sx",game.getPlayerA().getSx());
+        respGame.put("a_sy",game.getPlayerA().getSy());
+        respGame.put("b_id",game.getPlayerB().getId());
+        respGame.put("b_sx",game.getPlayerB().getSx());
+        respGame.put("b_sy",game.getPlayerB().getSy());
+        respGame.put("map",game.getG());
+
+        JSONObject resp=new JSONObject();
+        resp.put("event","start-pve");
+        resp.put("game",respGame);
+        if(users.get(a.getId())!=null)
+            users.get(a.getId()).sendMessage(resp.toJSONString());
+
+        game.start();
     }
     private void startMatching(Integer botId){
         System.out.println("startmathcing!");
@@ -195,6 +227,8 @@ public class WebSocketServer {
             startMatching(data.getInteger("bot_id"));
         } else if("stop-matching".equals(event)){
             stopMatching();
+        } else if("start-pve".equals(event)){
+            startpveGame(user.getId(),data.getInteger("bot_id"));
         } else if("move".equals(event)){
             move(data.getInteger("direction"));
         } else if("heartbeat".equals(event)){

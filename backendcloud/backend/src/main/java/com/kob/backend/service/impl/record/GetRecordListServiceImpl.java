@@ -32,13 +32,18 @@ public class GetRecordListServiceImpl implements GetRecordListService {
         JSONObject resp=new JSONObject();
         List<JSONObject> items=new LinkedList<>();
         for(Record record:records){
-            User userA=userMapper.selectById(record.getAId());
-            User userB=userMapper.selectById(record.getBId());
             JSONObject item=new JSONObject();
+            User userA=userMapper.selectById(record.getAId());
             item.put("a_photo",userA.getPhoto());
             item.put("a_username",userA.getUsername());
-            item.put("b_photo",userB.getPhoto());
-            item.put("b_username",userB.getUsername());
+            if(record.getBId()==0){
+                item.put("b_photo","https://cdn.luogu.com.cn/upload/image_hosting/sk5lwdp3.png");
+                item.put("b_username","人机训练");
+            }else{
+                User userB=userMapper.selectById(record.getBId());
+                item.put("b_photo",userB.getPhoto());
+                item.put("b_username",userB.getUsername());
+            }
             String result="平局";
             if("A".equals(record.getWinner())) result="A胜";
             else if("B".equals(record.getWinner())) result="B胜";

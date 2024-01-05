@@ -1,7 +1,7 @@
 
 export default{
     state: {
-        status:"matching",//matching正在匹配，playing正在对战
+        status:"menu",//menu菜单，matching正在匹配，matched匹配成功，playing正在对战
         socket:null,
         opponent_username:"",
         opponent_photo:"",
@@ -14,6 +14,10 @@ export default{
         b_sy:0,
         gameObject:null,
         winner:"none",
+        a_rating:"",
+        b_rating:"",
+        counter:0,
+        is_bot:false,
     },
     getters: {
     },
@@ -42,6 +46,16 @@ export default{
         },
         updateWinner(state,winner){
             state.winner=winner;
+        },
+        updateRating(state,data){
+            state.a_rating=data.a_rating;
+            state.b_rating=data.b_rating;
+        },
+        updateCounter(state,counter){
+            state.counter=counter;
+        },
+        updateIsBot(state,is_bot){
+            state.is_bot=is_bot;
         },
     },
     actions: {

@@ -21,8 +21,19 @@ export default{
         const store=useStore();
         const socketurl=`ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
         let socket=null;
+        let interval_id;
         store.commit("updateWinner","none");
+        store.commit("updateIsBot",false);
         store.commit("updateIsRecord",false);
+        const start_counter=()=>{
+            store.commit("updateCounter",5);
+            interval_id=setInterval(()=>{
+                let time=store.state.pk.counter;
+                if(time>5) clearInterval(interval_id);
+                time--;
+                store.commit("updateCounter",time);
+            },1000)
+        }
         onMounted(()=>{
             store.commit("updateOpponent",{
                 username:"我的对手",
@@ -40,15 +51,23 @@ export default{
                         username:data.opponent_username,
                         photo:data.opponent_photo,
                     })
+                    store.commit("updateStatus","matched");
+                    store.commit("updateGame",data.game);
                     setTimeout(()=>{
                         store.commit("updateStatus","playing");
+                        start_counter();
                     },2000);
+                }else if(data.event==="start-pve"){
                     store.commit("updateGame",data.game);
+                    store.commit("updateStatus","playing");
+                    start_counter();
                 }else if(data.event==="move"){
                     const game=store.state.pk.gameObject;
                     const [snake0,snake1]=game.snakes;
                     snake0.set_direction(data.a_direction);
                     snake1.set_direction(data.b_direction);
+                    clearInterval(interval_id);
+                    start_counter();
                 }else if(data.event==="result"){
                     const game=store.state.pk.gameObject;
                     if(game!=null){
@@ -60,7 +79,12 @@ export default{
                             snake1.status="die";
                         }
                         store.commit("updateWinner",data.winner);
+                        store.commit("updateRating",{
+                            a_rating:data.a_rating,
+                            b_rating:data.b_rating,
+                        })
                     }
+                    store.commit("updateCounter",10000);
                 }else if(data.event==="heartbeat"){
                     console.log(data);
                      socket.send(JSON.stringify({
@@ -74,7 +98,7 @@ export default{
         })
         onUnmounted(()=>{
             socket.close();
-            store.commit("updateStatus","matching");
+            store.commit("updateStatus","menu");
         })
     }
 }

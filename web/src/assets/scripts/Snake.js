@@ -50,12 +50,8 @@ export class Snake extends AcGameObject{
         this.eye_direction=d;
 
         const k=this.cells.length;
-        for(let i=k;i>0;i--){//除蛇头每个cell向前复制一格，新增原蛇尾
+        for(let i=k;i>0;i--){//除蛇头每个cell移动一格，此时0、1都为原蛇头
             this.cells[i]=JSON.parse(JSON.stringify(this.cells[i-1]));
-        }
-       
-        if(!this.gamemap.check_valid(this.next_cell)){//不合法
-            this.status="die";
         }
     }
     update_move(){//更新移动

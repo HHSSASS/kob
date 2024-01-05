@@ -11,7 +11,7 @@
             </div>
             <div class="col-4">
                 <div class="user-select-bot">
-                    <select v-model="select_bot" class="form-select" aria-label="Default select example">
+                    <select v-model="select_bot" class="form-select disabled" aria-label="Default select example" :disabled="$store.state.pk.status==='menu'?false:true">
                     <option value="-1" selected>亲自上阵</option>
                     <option v-for="bot in bots" :key="bot.id" :value="bot.id">{{ bot.title }}</option>
                     </select>
@@ -25,8 +25,13 @@
                     {{ $store.state.pk.opponent_username }}
                 </div>
             </div>
-            <div class="col-12" style="text-align: center;padding-top: 15vh;">
-                <button @click="click_match_btn" type="button" class="btn btn-info btn-lg">{{match_btn_info}}</button>
+            <div class="col-12" style="text-align: center;padding-top: 10vh;">
+                <button @click="click_match_btn" type="button" class="btn btn-info btn-lg" v-if="$store.state.pk.status==='menu'">开始匹配</button>
+                <button @click="click_match_btn" type="button" class="btn btn-info btn-lg" v-if="$store.state.pk.status==='matching'">取消</button>
+                <button type="button" class="btn btn-info btn-lg" v-if="$store.state.pk.status==='matched'" disabled>匹配成功</button>
+            </div>
+            <div class="col-12" style="text-align: center;padding-top: 2vh;">
+                <button @click="click_pve_btn" type="button" class="btn btn-info btn-lg">人机训练</button>
             </div>
         </div>
     </div>
@@ -40,24 +45,33 @@ import $ from 'jquery';
 export default{
     setup(){
         const store=useStore();
-        let match_btn_info=ref("开始匹配");
         let bots=ref([]);
         let select_bot=ref("-1");
 
         const click_match_btn=()=>{
-            if(match_btn_info.value==="开始匹配"){
-                match_btn_info.value="取消";
+            if(store.state.pk.status=="menu"){
+                store.commit("updateStatus","matching");
                 store.state.pk.socket.send(JSON.stringify({
                     event:"start-matching",
                     bot_id:select_bot.value,
                 }))
+                if(select_bot.value!=-1){
+                    store.commit("updateIsBot",true);
+                }
             }
-            else{
-                match_btn_info.value="开始匹配";
+            else if(store.state.pk.status=="matching"){
+                store.commit("updateStatus","menu");
                 store.state.pk.socket.send(JSON.stringify({
                     event:"stop-matching",
                 }))
+                store.commit("UpdateIsBot",false);
             }
+        }
+        const click_pve_btn=()=>{
+            store.state.pk.socket.send(JSON.stringify({
+                event:"start-pve",
+                bot_id:select_bot.value,
+            }))
         }
         const refresh_bots=()=>{ 
             $.ajax({
@@ -73,8 +87,8 @@ export default{
         }
         refresh_bots();
         return{
-            match_btn_info,
             click_match_btn,
+            click_pve_btn,
             bots,
             select_bot,
         }
