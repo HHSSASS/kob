@@ -13,7 +13,7 @@ public class AddLikeRecordController {
     @Autowired
     private AddLikeRecordService addLikeRecordService;
 
-    @PostMapping("/community/likerecord/add/")
+    @PostMapping("/api/community/likerecord/add/")
     public Map<String,String> add(@RequestParam Map<String,String> data){
         return addLikeRecordService.add(data);
     }

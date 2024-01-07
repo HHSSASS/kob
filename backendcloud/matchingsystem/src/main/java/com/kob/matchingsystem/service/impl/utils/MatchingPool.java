@@ -61,7 +61,7 @@ public class MatchingPool extends Thread{
         restTemplate.postForObject("http://127.0.0.1:3000/pk/startgame/",data,String.class);
     }
     private void matchPlayers(){//尝试匹配所有玩家
-        System.out.println("matchplayers "+players.toString());
+        //System.out.println("matchplayers "+players.toString());
         boolean[] used=new boolean[players.size()];
         for(int i=0;i<players.size();++i){
             if(used[i]) continue;

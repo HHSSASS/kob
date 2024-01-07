@@ -14,7 +14,7 @@ public class GetPostListController {
     @Autowired
     GetPostListService getPostListService;
 
-    @GetMapping("/community/getlist/")
+    @GetMapping("/api/community/getlist/")
     public JSONObject getList(@RequestParam Map<String,String> data){
         Integer page=Integer.parseInt(data.get("page"));
         return getPostListService.getList(page);

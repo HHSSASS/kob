@@ -85,7 +85,6 @@ public class WebSocketServer {
                         sendMessage(resp.toJSONString());
                     }
                     else {
-                        System.out.println("heartbeatbreak!");
                         break;
                     }
                 }
@@ -99,7 +98,7 @@ public class WebSocketServer {
                         Thread.sleep(5000);
                         lock.lock();
                         if(is_connected==false) {
-                            System.out.println("heartbeatdisconnected!");
+                            //System.out.println("heartbeatdisconnected!");
                             if(session!=null)
                                 session.close();
                             else if (user != null) {
@@ -203,7 +202,7 @@ public class WebSocketServer {
         game.start();
     }
     private void startMatching(Integer botId){
-        System.out.println("startmathcing!");
+        //System.out.println("startmathcing!");
         MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
         data.add("rating",this.user.getRating().toString());
@@ -211,7 +210,7 @@ public class WebSocketServer {
         restTemplate.postForObject("http://127.0.0.1:3001/player/add/",data,String.class);
     }
     private void stopMatching(){
-        System.out.println("stopmatching!");
+        //System.out.println("stopmatching!");
         MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
         restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
@@ -227,7 +226,7 @@ public class WebSocketServer {
     }
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("receive message!");
+        //System.out.println("receive message!");
         JSONObject data= JSON.parseObject(message);
         String event=data.getString("event");
         if("start-matching".equals(event)){
@@ -241,7 +240,7 @@ public class WebSocketServer {
         } else if("heartbeat".equals(event)){
             try {
                 lock.lock();
-                System.out.println("heartbeat");
+                //System.out.println("heartbeat");
                 is_connected=true;
             }finally {
                 lock.unlock();

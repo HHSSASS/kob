@@ -12,7 +12,7 @@ import java.util.List;
 public class GetlistController {
     @Autowired
     GetlistService getlistService;
-    @GetMapping("/user/bot/getlist/")
+    @GetMapping("/api/user/bot/getlist/")
     public List<Bot> getList(){
         return getlistService.getList();
     }

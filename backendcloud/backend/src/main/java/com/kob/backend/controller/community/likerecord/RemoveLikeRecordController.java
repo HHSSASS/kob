@@ -13,7 +13,7 @@ public class RemoveLikeRecordController {
     @Autowired
     private RemoveLikeRecordService removeLikeRecordService;
 
-    @PostMapping("/community/likerecord/remove/")
+    @PostMapping("/api/community/likerecord/remove/")
     public Map<String,String> remove(@RequestParam Map<String,String> data){
         return removeLikeRecordService.remove(data);
     }

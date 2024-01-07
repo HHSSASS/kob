@@ -22,7 +22,7 @@ export default{
     },
     setup(){
         const store=useStore();
-        const socketurl=`ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
+        const socketurl=`wss://app6418.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
         let socket=null;
         let interval_id;
         store.commit("updateWinner","none");

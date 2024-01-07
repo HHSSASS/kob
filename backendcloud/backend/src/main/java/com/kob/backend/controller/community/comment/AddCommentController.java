@@ -13,7 +13,7 @@ public class AddCommentController {
     @Autowired
     AddCommentService addCommentService;
 
-    @PostMapping("/community/comment/add/")
+    @PostMapping("/api/community/comment/add/")
     public Map<String,String> add(@RequestParam Map<String,String> data){
         return addCommentService.add(data);
     }

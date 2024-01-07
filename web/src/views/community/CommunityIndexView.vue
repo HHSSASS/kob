@@ -177,7 +177,7 @@ export default{
         const pull_page=page=>{
             current_page=page;
             $.ajax({
-                url:"http://127.0.0.1:3000/community/getlist/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/getlist/",
                 type:"get",
                 data:{
                     page,
@@ -197,7 +197,7 @@ export default{
         const add_post=()=>{
             postadd.message="";
             $.ajax({
-                url:"http://127.0.0.1:3000/community/add/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/add/",
                 type:"post",
                 data:{
                     content:postadd.content,
@@ -220,7 +220,7 @@ export default{
         }
         const remove_post=(post)=>{
             $.ajax({
-                url:"http://127.0.0.1:3000/community/remove/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/remove/",
                 type:"post",
                 data:{
                     post_id:post.post.id,
@@ -260,7 +260,7 @@ export default{
             current_comment_page=comment_page;
             commentadd.message="";
             $.ajax({
-                url:"http://127.0.0.1:3000/community/comment/getlist/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/comment/getlist/",
                 type:"get",
                 data:{
                     post_id:post.post.id,
@@ -279,7 +279,7 @@ export default{
         }
         const add_comment=()=>{
             $.ajax({
-                url:"http://127.0.0.1:3000/community/comment/add/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/comment/add/",
                 type:"post",
                 data:{
                     post_id:now_post.post.id,
@@ -303,7 +303,7 @@ export default{
         }
         const remove_comment=(comment)=>{
             $.ajax({
-                url:"http://127.0.0.1:3000/community/comment/remove/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/comment/remove/",
                 type:"post",
                 data:{
                     comment_id:comment.comment.id,
@@ -320,7 +320,7 @@ export default{
         }
         const remove_like=(post)=>{
             $.ajax({
-                url:"http://127.0.0.1:3000/community/likerecord/remove/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/likerecord/remove/",
                 type:"post",
                 data:{
                     post_id:post.post.id,
@@ -338,7 +338,7 @@ export default{
         }
         const add_like=(post)=>{
             $.ajax({
-                url:"http://127.0.0.1:3000/community/likerecord/add/",
+                url:"https://app6418.acapp.acwing.com.cn/api/community/likerecord/add/",
                 type:"post",
                 data:{
                     post_id:post.post.id,

@@ -14,7 +14,7 @@ public class GetCommentListController {
     @Autowired
     GetCommentListService getCommentListService;
 
-    @GetMapping("/community/comment/getlist/")
+    @GetMapping("/api/community/comment/getlist/")
     public JSONObject getList(@RequestParam Map<String,String> data){
         return getCommentListService.getList(data);
     }

@@ -13,7 +13,7 @@ public class AddPostController {
     @Autowired
     private AddPostService addPostService;
 
-    @PostMapping("/community/add/")
+    @PostMapping("/api/community/add/")
     public Map<String,String> add(@RequestParam Map<String,String> data){
         return addPostService.add(data);
     }

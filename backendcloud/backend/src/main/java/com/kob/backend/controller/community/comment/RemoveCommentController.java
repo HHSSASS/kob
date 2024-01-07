@@ -13,7 +13,7 @@ public class RemoveCommentController {
     @Autowired
     RemoveCommentService removeCommentService;
 
-    @PostMapping("/community/comment/remove/")
+    @PostMapping("/api/community/comment/remove/")
     public Map<String,String> remove(@RequestParam Map<String,String> data){
         return removeCommentService.remove(data);
     }

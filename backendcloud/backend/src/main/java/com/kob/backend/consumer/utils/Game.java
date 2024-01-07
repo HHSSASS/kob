@@ -174,7 +174,6 @@ public class Game extends Thread{
                 lock.lock();
                 try{
                     if(nextStepA!=null){
-                        System.out.println(uuid+" "+playerA.getId().toString()+" "+nextStepA);
                         sendReceiveMove(playerA);
                     }
                     if(nextStepB!=null){

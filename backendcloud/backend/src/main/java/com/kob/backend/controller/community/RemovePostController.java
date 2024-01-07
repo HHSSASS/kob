@@ -13,7 +13,7 @@ public class RemovePostController {
     @Autowired
     private RemovePostService removePostService;
 
-    @PostMapping("/community/remove/")
+    @PostMapping("/api/community/remove/")
     public Map<String,String> remove(@RequestParam Map<String,String> data){
         return removePostService.remove(data);
     }

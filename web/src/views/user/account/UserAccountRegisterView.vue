@@ -43,7 +43,7 @@ export default{
         store.commit("updatePullingInfo", false)
         const register=()=>{
             $.ajax({
-                url:"http://127.0.0.1:3000/user/account/register/",
+                url:"https://app6418.acapp.acwing.com.cn/api/user/account/register/",
                 type:"post",
                 data:{
                     username:username.value,
