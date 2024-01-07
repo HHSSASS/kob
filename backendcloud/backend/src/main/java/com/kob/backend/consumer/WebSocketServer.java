@@ -21,6 +21,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.locks.ReentrantLock;
@@ -131,7 +132,9 @@ public class WebSocketServer {
         User a=userMapper.selectById(aId),b=userMapper.selectById(bId);
         Bot botA=botMapper.selectById(aBotId),botB=botMapper.selectById(bBotId);
 
-        Game game=new Game(13,14,20,a.getId(),botA,b.getId(),botB);
+        UUID uuid=UUID.randomUUID();
+
+        Game game=new Game(uuid.toString(),13,14,20,a.getId(),botA,b.getId(),botB);
         game.createMap();
         if(users.get(a.getId())!=null)
             users.get(a.getId()).game=game;
@@ -139,6 +142,7 @@ public class WebSocketServer {
             users.get(b.getId()).game=game;
 
         JSONObject respGame=new JSONObject();
+        respGame.put("uuid",uuid.toString());
         respGame.put("a_id",game.getPlayerA().getId());
         respGame.put("a_sx",game.getPlayerA().getSx());
         respGame.put("a_sy",game.getPlayerA().getSy());
@@ -173,12 +177,15 @@ public class WebSocketServer {
         User a=userMapper.selectById(Id);
         Bot bot=botMapper.selectById(BotId);
 
-        Game game=new Game(13,14,20,a.getId(),bot,0,null);
+        UUID uuid=UUID.randomUUID();
+
+        Game game=new Game(uuid.toString(),13,14,20,a.getId(),bot,0,null);
         game.createMap();
         if(users.get(a.getId())!=null)
-            users.get(a.getId()).game=game;
+            users.get(a.getId()).game = game;
 
         JSONObject respGame=new JSONObject();
+        respGame.put("uuid",uuid.toString());
         respGame.put("a_id",game.getPlayerA().getId());
         respGame.put("a_sx",game.getPlayerA().getSx());
         respGame.put("a_sy",game.getPlayerA().getSy());

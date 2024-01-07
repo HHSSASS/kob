@@ -6,6 +6,7 @@ export default{
         opponent_username:"",
         opponent_photo:"",
         gamemap:null,
+        uuid:"",
         a_id:0,
         a_sx:0,
         a_sy:0,
@@ -17,7 +18,6 @@ export default{
         a_rating:"",
         b_rating:"",
         counter:0,
-        is_bot:false,
     },
     getters: {
     },
@@ -32,8 +32,12 @@ export default{
         updateStatus(state,status){
             state.status=status;
         },
+        updateUuid(state,uuid){
+            state.uuid=uuid;
+        },
         updateGame(state,game){
             state.gamemap=game.map;
+            state.uuid=game.uuid;
             state.a_id=game.a_id;
             state.a_sx=game.a_sx;
             state.a_sy=game.a_sy;
@@ -53,9 +57,6 @@ export default{
         },
         updateCounter(state,counter){
             state.counter=counter;
-        },
-        updateIsBot(state,is_bot){
-            state.is_bot=is_bot;
         },
     },
     actions: {

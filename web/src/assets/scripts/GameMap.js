@@ -30,6 +30,23 @@ export class GameMap extends AcGameObject{
         }
     }
     add_listening_events(){//绑定事件
+        this.ctx.canvas.focus();
+        this.ctx.canvas.addEventListener("keydown",e=>{
+            let d=-1;
+            if(e.key==='w') d=0;
+            else if(e.key==='d') d=1;
+            else if(e.key==='s') d=2;
+            else if(e.key==='a') d=3;
+            if(d>=0){
+                this.store.state.pk.socket.send(JSON.stringify({
+                    event:"move",
+                    direction:d,
+                }))
+            }
+        });
+    }
+    start(){
+        this.creat_walls();
         if(this.store.state.record.is_record){//录像
             let k=0;
             const a_steps=this.store.state.record.a_steps;
@@ -54,26 +71,8 @@ export class GameMap extends AcGameObject{
             },300)
         }
         else{
-            this.ctx.canvas.focus();
-            this.ctx.canvas.addEventListener("keydown",e=>{
-                let d=-1;
-                if(e.key==='w') d=0;
-                else if(e.key==='d') d=1;
-                else if(e.key==='s') d=2;
-                else if(e.key==='a') d=3;
-                if(d>=0){
-                    this.store.state.pk.socket.send(JSON.stringify({
-                        event:"move",
-                        direction:d,
-                    }))
-                    this.store.commit("updateCounter",10000);
-                }
-            });
+            this.add_listening_events();
         }
-    }
-    start(){
-        this.creat_walls();
-        this.add_listening_events();
     }
     check_ready(){//双方是否准备好下一回合
         for(const snake of this.snakes){

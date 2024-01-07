@@ -80,6 +80,6 @@ public class BotTest implements java.util.function.Supplier<Integer>{
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
+

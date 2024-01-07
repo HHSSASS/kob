@@ -18,7 +18,7 @@ public class GetlistServiceImpl implements GetlistService {
     @Autowired
     BotMapper botMapper;
     @Override
-    public List<Bot> getlist() {
+    public List<Bot> getList() {
         UsernamePasswordAuthenticationToken authenticationToken=
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser=(UserDetailsImpl) authenticationToken.getPrincipal();

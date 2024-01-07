@@ -31,7 +31,7 @@
                 <button type="button" class="btn btn-info btn-lg" v-if="$store.state.pk.status==='matched'" disabled>匹配成功</button>
             </div>
             <div class="col-12" style="text-align: center;padding-top: 2vh;">
-                <button @click="click_pve_btn" type="button" class="btn btn-info btn-lg">人机训练</button>
+                <button @click="click_pve_btn" type="button" class="btn btn-info btn-lg" :disabled="$store.state.pk.status==='menu'?false:true">人机训练</button>
             </div>
         </div>
     </div>
@@ -47,7 +47,6 @@ export default{
         const store=useStore();
         let bots=ref([]);
         let select_bot=ref("-1");
-
         const click_match_btn=()=>{
             if(store.state.pk.status=="menu"){
                 store.commit("updateStatus","matching");
@@ -55,16 +54,12 @@ export default{
                     event:"start-matching",
                     bot_id:select_bot.value,
                 }))
-                if(select_bot.value!=-1){
-                    store.commit("updateIsBot",true);
-                }
             }
             else if(store.state.pk.status=="matching"){
                 store.commit("updateStatus","menu");
                 store.state.pk.socket.send(JSON.stringify({
                     event:"stop-matching",
                 }))
-                store.commit("UpdateIsBot",false);
             }
         }
         const click_pve_btn=()=>{

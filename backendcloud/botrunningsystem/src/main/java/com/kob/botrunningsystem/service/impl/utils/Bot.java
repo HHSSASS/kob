@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Bot {
+    String uuid;
     Integer userId;
     String botCode;
     String input;

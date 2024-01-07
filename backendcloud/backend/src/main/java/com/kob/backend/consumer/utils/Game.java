@@ -5,7 +5,6 @@ import com.kob.backend.consumer.WebSocketServer;
 import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.Record;
 import com.kob.backend.pojo.User;
-import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -16,7 +15,8 @@ import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Game extends Thread{
-    final Integer rows,cols;
+    public String uuid;
+    private final Integer rows,cols;
     private final Integer inner_walls_count;
     private final int[][] g;
     private final static int[] dx={-1,0,1,0},dy={0,1,0,-1};
@@ -26,7 +26,8 @@ public class Game extends Thread{
     private String status="playing";//playing->finished
     private String winner="";//all平局;A;B
 
-    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB,Bot botB) {
+    public Game(String uuid,Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB,Bot botB) {
+        this.uuid=uuid;
         this.rows = rows;
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
@@ -144,10 +145,18 @@ public class Game extends Thread{
         if(player.getBotId().equals(-1)) return;
 
         MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
+        data.add("uuid",uuid);
         data.add("user_id",player.getId().toString());
         data.add("bot_code",player.getBotCode());
         data.add("input",getInput(player));
         WebSocketServer.restTemplate.postForObject("http://127.0.0.1:3002/bot/add/",data,String.class);
+    }
+    private void sendReceiveMove(Player player){
+        JSONObject resp=new JSONObject();
+        resp.put("event","receivemove");
+        resp.put("uuid",uuid);
+        if(WebSocketServer.users.get(player.getId())!=null)
+            WebSocketServer.users.get(player.getId()).sendMessage(resp.toJSONString());
     }
     private boolean nextStep(){//等待两名玩家下一步操作
         try {
@@ -164,6 +173,13 @@ public class Game extends Thread{
                 Thread.sleep(100);
                 lock.lock();
                 try{
+                    if(nextStepA!=null){
+                        System.out.println(uuid+" "+playerA.getId().toString()+" "+nextStepA);
+                        sendReceiveMove(playerA);
+                    }
+                    if(nextStepB!=null){
+                        sendReceiveMove(playerB);
+                    }
                     if(nextStepA!=null&&nextStepB!=null){
                         playerA.getSteps().add(nextStepA);
                         playerB.getSteps().add(nextStepB);
@@ -248,6 +264,7 @@ public class Game extends Thread{
         try {
             JSONObject resp=new JSONObject();
             resp.put("event","move");
+            resp.put("uuid",uuid);
             resp.put("a_direction",nextStepA);
             resp.put("b_direction",nextStepB);
             sendAllMessage(resp.toJSONString());
@@ -259,6 +276,7 @@ public class Game extends Thread{
     private void sendResult(){//向两名玩家公布结果
         JSONObject resp=new JSONObject();
         resp.put("event","result");
+        resp.put("uuid",uuid);
         resp.put("winner",winner);
 
         if(playerB.getId()!=0){//修改积分

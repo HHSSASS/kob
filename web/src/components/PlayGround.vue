@@ -2,14 +2,16 @@
 <template>
     <div class="content">
         <div>
-            <div class="user-position" style="text-align: center;" v-if="$store.state.record.is_record">
+            <div class="back-btn" v-if="$store.state.record.is_record">
                 <button @click="backlist" type="button" class="btn btn-info btn-lg">返回对战列表</button>
             </div>
             <div class="user-position" v-else-if="parseInt($store.state.user.id)===parseInt($store.state.pk.a_id)">您在左下角</div>
             <div class="user-position" v-else-if="parseInt($store.state.user.id)===parseInt($store.state.pk.b_id)">您在右上角</div>
-            <div class="counter" v-if="!$store.state.record.is_record&&$store.state.pk.winner!='none'">对战结束</div>
-            <div class="counter" v-else-if="!$store.state.record.is_record&&$store.state.pk.is_bot||$store.state.pk.counter>5">等待对手</div>
-            <div class="counter" v-else-if="!$store.state.record.is_record">{{$store.state.pk.counter}}</div>
+            <div class="counter" v-if="!$store.state.record.is_record">
+                <div v-if="$store.state.pk.winner!='none'||$store.state.pk.counter<0">对战结束</div>
+                <div v-else-if="$store.state.pk.counter>5">等待对手</div>
+                <div v-else>{{$store.state.pk.counter}}</div>
+            </div>
         </div>
         <div class="playground">
             <GameMap></GameMap>
@@ -46,6 +48,11 @@ div.playground{
     width:60vw;
     height: 70vh;
     margin: 40px 100px 40px 40px;
+}
+div.back-btn{
+    text-align: center;
+    padding-top: 300px;
+    padding-left: 150px;
 }
 div.user-position{
     text-align: center;

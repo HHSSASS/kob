@@ -16,6 +16,9 @@
           <li class="nav-item">
             <router-link :class="route_name == 'ranklist_index' ? 'nav-link active' : 'nav-link'" :to="{name:'ranklist_index'}">排行榜</router-link>
           </li>
+          <li class="nav-item">
+            <router-link :class="route_name == 'community_index' ? 'nav-link active' : 'nav-link'" :to="{name:'community_index'}">社区</router-link>
+          </li>
         </ul>
         <ul class="navbar-nav" v-if="$store.state.user.is_login">
           <li class="nav-item dropdown">
