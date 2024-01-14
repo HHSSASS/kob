@@ -15,5 +15,6 @@ public class User {
     private String username;
     private String password;
     private String photo;
+    private String wechatOpenid;
     private Integer rating;
 }

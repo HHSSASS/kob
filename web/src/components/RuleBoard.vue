@@ -88,6 +88,7 @@ public class BotTest implements java.util.function.Supplier&lt;Integer>{
         List&lt;Cell> bCells=getCells(bSx,bSy,strs[6]); //对手蛇身，含义同上
         //请在此编写您的代码，如需要import请在代码开头处编写
         //////////////////////////////////////////////////////////////////
+        int direction=0;
 
 
 

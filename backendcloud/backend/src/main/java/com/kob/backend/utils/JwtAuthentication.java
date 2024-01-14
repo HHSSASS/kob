@@ -1,4 +1,4 @@
-package com.kob.backend.consumer.utils;
+package com.kob.backend.utils;
 
 import com.kob.backend.utils.JwtUtil;
 import io.jsonwebtoken.Claims;

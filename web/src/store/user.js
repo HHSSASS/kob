@@ -7,8 +7,6 @@ export default{
         photo:"",
         token:"",
         is_login:false,
-        pulling_info:true,//正在拉取token信息
-        no_rule:false,
     },
     getters: {
     },
@@ -21,12 +19,6 @@ export default{
         },
         updateToken(state,token){
             state.token=token;
-        },
-        updatePullingInfo(state,pulling_info){
-            state.pulling_info=pulling_info;
-        },
-        updateNoRule(state,no_rule){
-            state.no_rule=no_rule;
         },
         logout(state){
             state.id="";

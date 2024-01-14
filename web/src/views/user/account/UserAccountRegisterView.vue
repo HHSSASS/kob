@@ -28,19 +28,16 @@ import ContentField from "../../../components/ContentField.vue"
 import { ref } from "vue";
 import router from '../../../router/index'
 import $ from 'jquery'
-import { useStore } from "vuex";
 
 export default{
     components:{
         ContentField
     },
     setup(){
-        const store=useStore();
         let username=ref('');
         let password=ref('');
         let confirmPassword=ref('');
         let message=ref('');
-        store.commit("updatePullingInfo", false)
         const register=()=>{
             $.ajax({
                 url:"https://app6418.acapp.acwing.com.cn/api/user/account/register/",

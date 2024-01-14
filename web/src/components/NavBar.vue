@@ -32,7 +32,7 @@
             </ul>
           </li>
         </ul>
-        <ul class="navbar-nav" v-else-if="!$store.state.user.pulling_info">
+        <ul class="navbar-nav" v-else-if="!$store.state.user.is_login">
           <li class="nav-item">
             <router-link class='nav-link' :to="{name:'user_account_login'}">登录</router-link>
           </li>

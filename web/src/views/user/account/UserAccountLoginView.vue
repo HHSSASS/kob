@@ -1,5 +1,5 @@
 <template>
-    <ContentField v-if="!$store.state.user.pulling_info">
+    <ContentField>
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <form @submit.prevent="login">
@@ -16,14 +16,16 @@
                     <button type="submit" class="btn btn-primary">登录</button>
                 </form>
                 <div class="oauth">
-                    <div>一键注册登录:</div>
+                    <div style="padding-top: 10px;">一键注册登录:</div>
                     &nbsp;
-                    <div style="cursor: pointer;">
-                        <img width="30" src="https://cdn.luogu.com.cn/upload/image_hosting/jvmtthfg.png" alt="">
+                    <i @click="phone_login" class="iconfont icon-hongseshouji-X" style="cursor: pointer;font-size:35px;color: rgb(31, 92, 190);"></i>
+                    &nbsp;
+                    <div style="cursor: pointer;padding-top: 12px;">
+                        <img @click="wechat_login" width="30" src="https://cdn.luogu.com.cn/upload/image_hosting/jvmtthfg.png" alt="">
                     </div>
                     &nbsp;
-                    <div style="cursor: pointer;">
-                        <img width="28" src="https://cdn.luogu.com.cn/upload/image_hosting/8vl3e7h4.png" alt="">
+                    <div style="cursor: pointer;padding-top: 12px;">
+                        <img @click="qq_login" width="28" src="https://cdn.luogu.com.cn/upload/image_hosting/8vl3e7h4.png" alt="">
                     </div>
                 </div>
             </div>
@@ -32,6 +34,7 @@
 </template>
 
 <script>
+import '@/assets/iconfont/iconfont.css'
 import ContentField from "../../../components/ContentField.vue"
 import { useStore } from "vuex";
 import { ref } from "vue";
@@ -46,21 +49,6 @@ export default{
         let username=ref('');
         let password=ref('');
         let message=ref('');
-        const jwt_token=localStorage.getItem("jwt_token");
-        if(jwt_token){
-            store.commit("updateToken",jwt_token);
-            store.dispatch("getinfo",{
-                success(){
-                    router.push({name:'home'});
-                },
-                error(){
-                    store.commit("updatePullingInfo",false);
-                },
-            })
-        }
-        else{
-            store.commit("updatePullingInfo",false);
-        }
         const login=()=>{
             message.value="";
             store.dispatch("login",{
@@ -81,12 +69,24 @@ export default{
         const register=()=>{
             router.push({name:'user_account_register'});
         }
+        const phone_login=()=>{
+            router.push({name:'user_account_phone_login'});
+        }
+        const wechat_login=()=>{
+            router.push({name:'user_account_wechat_login'});
+        }
+        const qq_login=()=>{
+            router.push({name:'user_account_qq_login'});
+        }
         return{
             username,
             password,
             message,
             login,
             register,
+            phone_login,
+            wechat_login,
+            qq_login,
         }
     }
 }

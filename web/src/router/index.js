@@ -8,6 +8,9 @@ import UserBotIndexView from "../views/user/bot/UserBotIndexView"
 import NotFound from "../views/error/NotFound"
 import UserAccountLoginView from "../views/user/account/UserAccountLoginView"
 import UserAccountRegisterView from "../views/user/account/UserAccountRegisterView"
+import UserAccountPhoneLoginView from "../views/user/account/phone/UserAccountPhoneLoginView"
+import UserAccountWechatLoginView from "../views/user/account/wechat/UserAccountWechatLoginView"
+import UserAccountQQLoginView from "../views/user/account/qq/UserAccountQQLoginView"
 import store from '../store/index'
 
 const routes = [
@@ -68,7 +71,7 @@ const routes = [
     },
   },
   {
-    path:"/user/account/login",
+    path:"/user/account/login/",
     name:"user_account_login",
     component:UserAccountLoginView,
     meta:{
@@ -76,12 +79,36 @@ const routes = [
     },
   },
   {
-    path:"/user/account/register",
+    path:"/user/account/register/",
     name:"user_account_register",
     component:UserAccountRegisterView,
     meta:{
       requestAuth:false
     },
+  },
+  {
+    path:"/user/account/phone/login/",
+    name:"user_account_phone_login",
+    component:UserAccountPhoneLoginView,
+    meta:{
+      requestAuth:false
+    }
+  },
+  {
+    path:"/user/account/wechat/login/",
+    name:"user_account_wechat_login",
+    component:UserAccountWechatLoginView,
+    meta:{
+      requestAuth:false
+    }
+  },
+  {
+    path:"/user/account/qq/login/",
+    name:"user_account_qq_login",
+    component:UserAccountQQLoginView,
+    meta:{
+      requestAuth:false
+    }
   },
   {
     path:"/404/",
@@ -104,9 +131,21 @@ const router = createRouter({
 
 router.beforeEach((to,from,next)=>{//通过router跳转页面前调用
   if(to.meta.requestAuth&&!store.state.user.is_login){
-    next({name:"user_account_login"});
-  }
-  else{
+    const jwt_token=localStorage.getItem("jwt_token");
+    if(jwt_token){
+      store.commit("updateToken",jwt_token);
+      store.dispatch("getinfo",{
+          success(){
+              next();
+          },
+          error(){
+              next({name:"user_account_login"});
+          },
+      })
+    }else{
+      next({name:"user_account_login"});
+    }
+  }else{
     next();
   }
 })
