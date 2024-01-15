@@ -13,8 +13,10 @@ public class User {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
-    private String password;
     private String photo;
+    private String password;
+    private String phoneNumber;
     private String wechatOpenid;
+    private String qqOpenid;
     private Integer rating;
 }

@@ -39,6 +39,7 @@ import ContentField from "../../../components/ContentField.vue"
 import { useStore } from "vuex";
 import { ref } from "vue";
 import router from '../../../router/index'
+import $ from "jquery";
 
 export default{
     components:{
@@ -76,7 +77,16 @@ export default{
             router.push({name:'user_account_wechat_login'});
         }
         const qq_login=()=>{
-            router.push({name:'user_account_qq_login'});
+            $.ajax({
+                url:"https://app6418.acapp.acwing.com.cn/api/user/account/qq/applyurl/",
+                type:"post",
+                success(resp){
+                    if(resp.message==="successful"){
+                        window.location.replace(resp.apply_url);
+                    }
+                }
+            })
+            //router.push({name:'user_account_qq_login'});
         }
         return{
             username,

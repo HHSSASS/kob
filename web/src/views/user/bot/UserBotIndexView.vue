@@ -1,5 +1,4 @@
 <template>
-    <myUpload v-model="showDialog" :headers="$store.state.user.token" url="https://app6418.acapp.acwing.com.cn/api/user/photo/update/" @crop-upload-success="update_success"/>
     <div class="container">
         <div class="row">
             <div class="col-3">
@@ -114,12 +113,11 @@ import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-chrome';
 import 'ace-builds/src-noconflict/ext-language_tools';
-import myUpload from 'vue-image-crop-upload'
+
 
 export default{
     components:{
         VAceEditor,
-        myUpload,
     },
     setup(){
         ace.config.set(
@@ -224,7 +222,7 @@ export default{
             is_show.value=false;
         }
         const update_photo=()=>{
-            showDialog.value=true;
+
         }
         return{
             is_show,
@@ -243,6 +241,9 @@ export default{
 </script>
 
 <style scoped>
+.quill-img {
+  display: none;
+}
 div.error-message{
     color:red;
 }
@@ -260,6 +261,6 @@ div.update_photo_text{
     color:white;
     font-size: 40px;
     font-weight: 500;
-    padding-top: 10vh;
+    padding-top: 12vh;
 }
 </style>

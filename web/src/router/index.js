@@ -10,6 +10,7 @@ import UserAccountLoginView from "../views/user/account/UserAccountLoginView"
 import UserAccountRegisterView from "../views/user/account/UserAccountRegisterView"
 import UserAccountPhoneLoginView from "../views/user/account/phone/UserAccountPhoneLoginView"
 import UserAccountWechatLoginView from "../views/user/account/wechat/UserAccountWechatLoginView"
+import UserAccountWechatAuthView from "../views/user/account/wechat/UserAccountWechatAuthView"
 import UserAccountQQLoginView from "../views/user/account/qq/UserAccountQQLoginView"
 import store from '../store/index'
 
@@ -98,6 +99,14 @@ const routes = [
     path:"/user/account/wechat/login/",
     name:"user_account_wechat_login",
     component:UserAccountWechatLoginView,
+    meta:{
+      requestAuth:false
+    }
+  },
+  {
+    path:"/user/account/wechat/auth/",
+    name:"user_account_wechat_auth",
+    component:UserAccountWechatAuthView,
     meta:{
       requestAuth:false
     }

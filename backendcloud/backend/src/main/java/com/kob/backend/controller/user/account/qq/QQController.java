@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.service.user.account.qq.QQService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,15 +15,15 @@ public class QQController {
     @Autowired
     QQService qqService;
 
-    @GetMapping("/api/user/account/qq/applycode/")
-    public JSONObject applyCode(){
-        return qqService.applyCode();
+    @PostMapping("/api/user/account/qq/applyurl/")
+    public JSONObject applyUrl(){
+        return qqService.applyUrl();
     }
 
-    @GetMapping("/api/user/account/qq/receivecode")
-    public JSONObject receiveCode(@RequestParam Map<String,String> data){
+    @PostMapping("/api/user/account/qq/applyinfo/")
+    public JSONObject applyInfo(@RequestParam Map<String,String> data){
         String code=data.get("code");
         String state=data.get("state");
-        return qqService.receiveCode(code,state);
+        return qqService.applyInfo(code,state);
     }
 }

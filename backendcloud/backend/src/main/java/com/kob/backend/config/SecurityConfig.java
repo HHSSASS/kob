@@ -42,9 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/account/token/",
                         "/api/user/account/register/",
                         "/api/user/photo/update/",
+                        "/api/user/account/phone/applycode/",
+                        "/api/user/account/phone/login/",
+                        "/api/user/account/wechat/applyqr/",
                         "/api/user/account/wechat/applyinfo/",
-                        "/api/user/account/wechat/receivemessage/",
-                        "/api/user/account/wechat/applyqr/"
+                        "/api/user/account/wechat/login/",
+                        "/api/user/account/qq/applyurl/",
+                        "/api/user/account/qq/applyinfo/"
                 ).permitAll()
                 .antMatchers("/pk/startgame/","/pk/receivebotmove/").hasIpAddress("127.0.0.1")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
