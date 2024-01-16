@@ -100,6 +100,7 @@ public class WechatServiceImpl implements WechatService {
             User user=users.get(0);
             String jwt= JwtUtil.createJWT(user.getId().toString());
             redisTemplate.opsForValue().set(state,jwt);
+            redisTemplate.expire(state, Duration.ofMinutes(1));
             resp.put("message","successful");
             return resp;
         }else{
@@ -112,14 +113,15 @@ public class WechatServiceImpl implements WechatService {
             }
             User user=new User(null,username,photo,null,null,openid,null,0);
             userMapper.insert(user);
-            if(DownloadPhotoUtil.downloadPhoto(photo,"/home/hh/kob/images/photo/"+user.getId().toString()+".png")){
-                photo="https://app6418.acapp.acwing.com.cn/images/photo/"+user.getId().toString()+".png";
+            if(DownloadPhotoUtil.downloadPhoto(photo,"/home/hh/kob/images/photo/"+user.getId().toString()+".jpeg")){
+                photo="https://app6418.acapp.acwing.com.cn/images/photo/"+user.getId().toString()+".jpeg";
             }
             else photo=null;
             User new_user=new User(user.getId(),username,photo,null,null,openid,null,0);
             userMapper.updateById(new_user);
             String jwt= JwtUtil.createJWT(user.getId().toString());
             redisTemplate.opsForValue().set(state,jwt);
+            redisTemplate.expire(state, Duration.ofMinutes(1));
             resp.put("message","successful");
             return resp;
         }
@@ -137,6 +139,7 @@ public class WechatServiceImpl implements WechatService {
                 resp.put("message","failed");
                 return resp;
             }else{
+                redisTemplate.delete(state);
                 resp.put("message","successful");
                 resp.put("jwt_token",jwt);
                 return resp;

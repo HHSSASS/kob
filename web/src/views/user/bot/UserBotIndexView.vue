@@ -1,10 +1,11 @@
 <template>
+    <Cropper v-if="show"></Cropper>
     <div class="container">
         <div class="row">
             <div class="col-3">
                 <div  class="card" style="margin-top: 20px;">
                     <div @mouseover="show_update_photo" @mouseleave="hide_update_photo"  class="card-body">
-                        <div @click="update_photo" class="update_photo" v-show="is_show">
+                        <div @click="update_photo" class="update_photo" v-show="show_update">
                             <div class="update_photo_text">修改头像</div>
                         </div>
                         <img :src="$store.state.user.photo" alt="" style="width:100%;">
@@ -103,6 +104,7 @@
 </template>
    
 <script>
+import Cropper from "@/components/PhotoCropper.vue"
 import { ref, reactive } from 'vue'
 import $ from 'jquery'
 import { useStore } from "vuex"
@@ -118,6 +120,7 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 export default{
     components:{
         VAceEditor,
+        Cropper,
     },
     setup(){
         ace.config.set(
@@ -125,8 +128,8 @@ export default{
             "https://cdn.jsdelivr.net/npm/ace-builds@" + require('ace-builds').version + "/src-noconflict/"
         )
         const store=useStore();
-        let is_show=ref(false);
-        let showDialog=ref(false);
+        let show=ref(false);
+        let show_update=ref(false);
         let bots=ref([]);
         const botadd=reactive({
             title:"",
@@ -216,17 +219,18 @@ export default{
             })
         }
         const show_update_photo=()=>{
-            is_show.value=true;
+            show_update.value=true;
         }
         const hide_update_photo=()=>{
-            is_show.value=false;
+            show_update.value=false;
         }
         const update_photo=()=>{
-
+            show.value=false;
+            setTimeout(()=>{show.value=true;},200);
         }
         return{
-            is_show,
-            showDialog,
+            show,
+            show_update,
             bots,
             botadd,
             add_bot,
@@ -241,9 +245,6 @@ export default{
 </script>
 
 <style scoped>
-.quill-img {
-  display: none;
-}
 div.error-message{
     color:red;
 }
@@ -261,6 +262,6 @@ div.update_photo_text{
     color:white;
     font-size: 40px;
     font-weight: 500;
-    padding-top: 12vh;
+    padding-top: 30%;
 }
 </style>

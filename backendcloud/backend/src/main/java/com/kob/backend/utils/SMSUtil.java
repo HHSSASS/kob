@@ -1,11 +1,15 @@
 package com.kob.backend.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
+import com.google.gson.Gson;
+
+import javax.swing.*;
 
 public class SMSUtil {
     /**
@@ -15,8 +19,8 @@ public class SMSUtil {
      * @param phoneNumbers 手机号
      * @param param 参数
      */
-    public static void sendMessage(String signName, String templateCode,String phoneNumbers,String param){
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tHRxs2FeCu5JcJTGbm2", "v0H4PaJpXSwNr6XChtlVYAgmQWgKRA");
+    public static boolean sendMessage(String signName, String templateCode,String phoneNumbers,String param){
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tAz8YGNC9zuvWxDYgfX", "HRAAXJKD4tNTejrnH27LGaVbCmohIu");
 
         IAcsClient client = new DefaultAcsClient(profile);
 
@@ -39,9 +43,10 @@ public class SMSUtil {
 
         try {
             SendSmsResponse response = client.getAcsResponse(request);
-            System.out.println("短信发送成功");
+            return "OK".equals(response.getCode());
         }catch (ClientException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

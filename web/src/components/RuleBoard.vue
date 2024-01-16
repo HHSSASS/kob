@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-primary btn-lg float-end" data-bs-toggle="modal" data-bs-target="#rule">规则</button>
+    <button type="button" class="btn btn-primary btn-lg float-end" data-bs-toggle="modal" data-bs-target="#rule" ref="rule_show">规则</button>
     <div class="modal fade" id="rule" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -112,7 +112,11 @@ public class BotTest implements java.util.function.Supplier&lt;Integer>{
                     <div class="title">作者水平有限，如遇到BUG或有任何问题可至社区反馈，感谢您的游玩((ヾ(｡･ω･)ﾉ☆ﾟ+.</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">确定</button>
+                    <div class="form-check" style="margin-left: 10px;">
+                        <input v-model="check" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">本次不再提醒</label>
+                    </div>
+                    <button @click="confirm" type="button" class="btn btn-primary" data-bs-dismiss="modal">确定</button>
                 </div>
             </div>
         </div>
@@ -120,6 +124,30 @@ public class BotTest implements java.util.function.Supplier&lt;Integer>{
 </template>
 
 <script>
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+export default{
+    setup(){
+        const store=useStore();
+        let rule_show=ref(null);
+        let check=ref(!store.state.user.show_rule);
+        onMounted(()=>{
+            if(store.state.user.show_rule){
+                rule_show.value.click();
+            } 
+        })
+        const confirm=()=>{
+            store.commit("updateShowRule",!check.value);
+        }
+        return{
+            rule_show,
+            check,
+            confirm,
+        }
+    }
+}
 </script>
 
 <style scoped>

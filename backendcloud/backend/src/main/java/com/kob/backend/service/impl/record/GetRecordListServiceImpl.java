@@ -37,7 +37,7 @@ public class GetRecordListServiceImpl implements GetRecordListService {
             item.put("a_photo",userA.getPhoto());
             item.put("a_username",userA.getUsername());
             if(record.getBId()==0){
-                item.put("b_photo","https://cdn.luogu.com.cn/upload/image_hosting/sk5lwdp3.png");
+                item.put("b_photo","https://cdn.luogu.com.cn/upload/image_hosting/rqqobdjr.png");
                 item.put("b_username","人机训练");
             }else{
                 User userB=userMapper.selectById(record.getBId());

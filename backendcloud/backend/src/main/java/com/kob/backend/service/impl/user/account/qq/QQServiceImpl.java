@@ -121,8 +121,8 @@ public class QQServiceImpl implements QQService {
             }
             User user=new User(null,username,photo,null,null,openid,null,0);
             userMapper.insert(user);
-            if(DownloadPhotoUtil.downloadPhoto(photo,"/home/hh/kob/images/photo/"+user.getId().toString()+".png")){
-                photo="https://app6418.acapp.acwing.com.cn/images/photo/"+user.getId().toString()+".png";
+            if(DownloadPhotoUtil.downloadPhoto(photo,"/home/hh/kob/images/photo/"+user.getId().toString()+".jpeg")){
+                photo="https://app6418.acapp.acwing.com.cn/images/photo/"+user.getId().toString()+".jpeg";
             }
             else photo=null;
             User new_user=new User(user.getId(),username,photo,null,null,openid,null,0);

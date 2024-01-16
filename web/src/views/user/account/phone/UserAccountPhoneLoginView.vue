@@ -10,7 +10,7 @@
                     <label for="verification_code" class="form-label">验证码</label>
                     <div class="input-group mb-3">
                         <input v-model="verification_code" type="text" class="form-control" id="verification_code" placeholder="请输入验证码">
-                        <button @click="apply_code" class="btn btn-outline-secondary" type="button" id="button-addon" :disabled="counter>0">{{counter<=0?'获取验证码':counter+'s后重新获取'}}</button>
+                        <button @click="apply_code" class="btn btn-outline-secondary" type="button" id="button-addon" :disabled="counter>=0">{{counter<=0?'获取验证码':counter+'s后重新获取'}}</button>
                     </div>
                     <div class="error-message">{{message}}</div>
                     <div @click="password_login" class="password_login">用户名密码登录</div>
@@ -38,7 +38,7 @@ export default{
         let phone_number=ref('');
         let verification_code=ref('');
         let message=ref('');
-        let counter=ref(0);
+        let counter=ref(-1);
         let interval_id;
         const apply_code=()=>{
             message.value='';
@@ -53,7 +53,7 @@ export default{
                         counter.value=60;
                         interval_id=setInterval(()=>{
                             counter.value--;
-                            if(counter.value<=0) clearInterval(interval_id);
+                            if(counter.value<0) clearInterval(interval_id);
                         },1000)
                     }
                     else{
@@ -64,6 +64,7 @@ export default{
         }
         const login=()=>{
             message.value='';
+            counter.value=0;
             $.ajax({
                 url:"https://app6418.acapp.acwing.com.cn/api/user/account/phone/login/",
                 type:"post",
@@ -80,6 +81,7 @@ export default{
                     }
                     else{
                         message.value=resp.message;
+                        counter.value=-1;
                     }
                 },
             })

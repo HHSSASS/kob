@@ -17,8 +17,8 @@ import java.util.Random;
 
 @Service
 public class PhoneServiceImpl implements PhoneService {
-    String signName="";
-    String templateCode="";
+    String signName="KOB";
+    String templateCode="SMS_464830486";
     Random random=new Random();
     @Autowired
     UserMapper userMapper;
@@ -41,11 +41,15 @@ public class PhoneServiceImpl implements PhoneService {
         for(int i=0;i<6;++i){
             code.append((char)(random.nextInt(10)+'0'));
         }
-        SMSUtil.sendMessage(signName,templateCode,number,code.toString());
-        redisTemplate.opsForValue().set(number,code.toString());
-        redisTemplate.expire(number, Duration.ofMinutes(10));
-        resp.put("message","successful");
-        return resp;
+        if(SMSUtil.sendMessage(signName,templateCode,number,code.toString())){
+            redisTemplate.opsForValue().set(number,code.toString());
+            redisTemplate.expire(number, Duration.ofMinutes(10));
+            resp.put("message","successful");
+            return resp;
+        }else{
+            resp.put("message","验证码发送失败");
+            return resp;
+        }
     }
 
     @Override

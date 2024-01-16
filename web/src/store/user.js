@@ -7,6 +7,7 @@ export default{
         photo:"",
         token:"",
         is_login:false,
+        show_rule:true,
     },
     getters: {
     },
@@ -19,6 +20,9 @@ export default{
         },
         updateToken(state,token){
             state.token=token;
+        },
+        updateShowRule(state,show_rule){
+            state.show_rule=show_rule;
         },
         logout(state){
             state.id="";

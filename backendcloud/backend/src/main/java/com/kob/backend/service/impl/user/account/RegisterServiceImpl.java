@@ -30,6 +30,10 @@ public class RegisterServiceImpl implements RegisterService {
             map.put("message", "用户名不能为空");
             return map;
         }
+        if(username.length()>100){
+            map.put("message","用户名长度不能大于100");
+            return map;
+        }
         if(password==null||confirmPassword==null){
             map.put("message", "密码不能为空");
             return map;
@@ -38,16 +42,16 @@ public class RegisterServiceImpl implements RegisterService {
             map.put("message", "密码不能为空");
             return map;
         }
+        if(password.length()>100){
+            map.put("message","密码长度不能大于100");
+            return map;
+        }
         if(!password.equals(confirmPassword)){
             map.put("message","两次输入的密码不一致");
             return map;
         }
-        if(username.length()>100){
-            map.put("message","用户名长度不能大于100");
-            return map;
-        }
-        if(password.length()>100){
-            map.put("message","密码长度不能大于100");
+        if("人机训练".equals(username)){
+            map.put("message","用户名已存在");
             return map;
         }
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
