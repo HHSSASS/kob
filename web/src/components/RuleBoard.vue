@@ -14,7 +14,7 @@
                     <div>双方蛇身前十回合每回合伸长一格，十回合后每三回合伸长一格。</div>
                     &nbsp;
                     <div class="title">天梯分规则：</div>
-                    <div>胜利+5分，失败-2分，平局+0，人机训练结果不影响天梯分。</div>
+                    <div>匹配模式胜利+5分，失败-3分，平局+0分；人机训练胜利+1分，失败-1分，平局+0分。</div>
                     &nbsp;
                     <div class="title">亲自上阵：</div>
                     <div>使用键盘WSAD分别控制蛇的上下左右移动。</div>
@@ -34,11 +34,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 //如需要import，请在此编写
 ////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////               
+////////////////////////////////////////////////////////////////        
+
 public class BotTest implements java.util.function.Supplier&lt;Integer>{
 
     static class Cell{ //蛇身每个块
@@ -49,7 +51,7 @@ public class BotTest implements java.util.function.Supplier&lt;Integer>{
         }
     }
 
-    private boolean check_tail_increasing(int step){ //判断下一回合蛇身是否伸长
+    public boolean check_tail_increasing(int step){ //判断下一回合蛇身是否伸长
         return step &lt;= 10 || step % 3 == 1;
     }
 
@@ -96,6 +98,12 @@ public class BotTest implements java.util.function.Supplier&lt;Integer>{
         return direction;//返回下一步移动方向（0，1，2，3）
         //////////////////////////////////////////////////////////////////
     }
+
+    //可在此编写新函数
+    /////////////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////////////////////
 
     @Override
     public Integer get() { //读入对战局面文件，内容为将对战局面编码后的字符串

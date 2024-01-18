@@ -11,7 +11,10 @@
                     <input ref="input" type="file" accept="image/*" @change="setImage" style="display: none;">
                     <div class="row">
                         <div class="col-6">
-                            <div class="img-cropper">
+                            <div style="margin-left: 30px;" v-show="imgSrc===''">
+                                <img src="https://app6418.acapp.acwing.com.cn/images/user.png" alt="" width="100%">
+                            </div>
+                            <div class="img-cropper" v-show="imgSrc!=''">
                                 <vue-cropper
                                     ref="cropper"
                                     :aspect-ratio="1"
@@ -78,7 +81,6 @@ export default {
                 u8arr[n] = bstr.charCodeAt(n);
             }
             var file=new File([u8arr], 'photo.' + fileExt, {type: type,});
-            console.log(file.size);
             if(file.size/1024/1000>1){
                 message.value="图片大小不能超过1MB";
                 return;
@@ -109,7 +111,7 @@ export default {
         }
         const setImage=(e)=>{
             const file = e.target.files[0];
-            console.log(file.size);
+            if(file==null) return;
             if(file.size/1024/1024>1){
                 message.value="图片大小不能超过1MB";
                 return;

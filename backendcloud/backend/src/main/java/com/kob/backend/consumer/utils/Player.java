@@ -17,6 +17,7 @@ public class Player {
     private Integer sx;
     private Integer sy;
     private List<Integer> steps;
+    private boolean connection;
 
     private boolean check_tail_increasing(int step){
         return step <= 10 || step % 3 == 1;

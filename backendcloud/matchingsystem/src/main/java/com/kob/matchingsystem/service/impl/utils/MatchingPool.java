@@ -49,8 +49,8 @@ public class MatchingPool extends Thread{
     }
     private boolean checkMatched(Player a,Player b){//判断两名玩家是否匹配
         int ratingDelta=Math.abs(a.getRating()-b.getRating());
-        int waitingTime= Math.min(a.getWaitingTime(),b.getWaitingTime());
-        return ratingDelta<=waitingTime*20;
+        int waitingTime= Math.max(a.getWaitingTime(),b.getWaitingTime());
+        return ratingDelta<=waitingTime*30;
     }
     private void sendResult(Player a,Player b){//返回匹配结果
         MultiValueMap<String,String> data=new LinkedMultiValueMap<>();

@@ -49,7 +49,6 @@ export default{
                 success(resp){
                     if(resp.message==="successful"){
                         clearInterval(interval_id);
-                        console.log(resp.jwt_token);
                         localStorage.setItem("jwt_token",resp.jwt_token);
                         store.commit("updateToken",resp.jwt_token);
                         router.push({name:"home"});

@@ -25,6 +25,7 @@ export default{
         const socketurl=`wss://app6418.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
         let socket=null;
         let interval_id;
+        let heartbeat_id;
         store.commit("updateWinner","none");
         store.commit("updateIsRecord",false);
         const start_counter=()=>{
@@ -44,6 +45,11 @@ export default{
             socket.onopen=()=>{
                 console.log("connected!");
                 store.commit("updateSocket",socket);
+                heartbeat_id=setInterval(()=>{
+                    socket.send(JSON.stringify({
+                         event:"heartbeat",
+                     }));
+                },1000);
             }
             socket.onmessage=msg=>{
                 const data=JSON.parse(msg.data);
@@ -94,13 +100,12 @@ export default{
                         clearInterval(interval_id);
                     }
                 }else if(data.event==="heartbeat"){
-                    socket.send(JSON.stringify({
-                         event:"heartbeat",
-                     }))
+                    //console.log("heartbeat");
                 }
             }
             socket.onclose=()=>{
                 console.log("disconnected!");
+                clearInterval(heartbeat_id);
             }
         })
         onUnmounted(()=>{

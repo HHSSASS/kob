@@ -35,7 +35,7 @@ public class WebSocketServer {
     public static RestTemplate restTemplate;
     public Game game=null;
 
-    private boolean is_connected=false;
+    private boolean connected=false;
     private ReentrantLock lock=new ReentrantLock();
 
     @Autowired
@@ -72,38 +72,20 @@ public class WebSocketServer {
             public void run() {
                 while(true){
                     try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    JSONObject resp=new JSONObject();
-                    resp.put("event","heartbeat");
-                    if(users.get(user.getId())!=null) {
-                        sendMessage(resp.toJSONString());
-                    }
-                    else {
-                        break;
-                    }
-                }
-            }
-        }.start();
-        new Thread(){
-            @Override
-            public void run() {
-                while(true){
-                    try {
                         Thread.sleep(5000);
                         lock.lock();
-                        if(is_connected==false) {
-                            //System.out.println("heartbeatdisconnected!");
-                            if(session!=null)
+                        if(!connected) {
+                            //System.out.println("disheartbeat");
+                            if(session!=null){
                                 session.close();
-                            else if (user != null) {
+                            }else if (user != null) {
                                 users.remove(user.getId());
                             }
                             break;
                         }
-                        else is_connected=false;
+                        else{
+                            connected=false;
+                        }
                     } catch (InterruptedException | IOException e) {
                         e.printStackTrace();
                     }finally {
@@ -119,10 +101,17 @@ public class WebSocketServer {
         System.out.println("disconnected!");
         if (this.user != null) {
             users.remove(this.user.getId());
+            MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
+            data.add("user_id",this.user.getId().toString());
+            restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
+            if(game!=null){
+                if(game.getPlayerA().getId().equals(user.getId())){
+                    game.getPlayerA().setConnection(false);
+                } else if(game.getPlayerB().getId().equals(user.getId())){
+                    game.getPlayerB().setConnection(false);
+                }
+            }
         }
-        MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
-        data.add("user_id",this.user.getId().toString());
-        restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
     }
     public static void startGame(Integer aId,Integer aBotId,Integer bId,Integer bBotId){
         User a=userMapper.selectById(aId),b=userMapper.selectById(bId);
@@ -237,8 +226,13 @@ public class WebSocketServer {
         } else if("heartbeat".equals(event)){
             try {
                 lock.lock();
+                connected=true;
                 //System.out.println("heartbeat");
-                is_connected=true;
+                JSONObject resp=new JSONObject();
+                resp.put("event","heartbeat");
+                if(users.get(user.getId())!=null) {
+                    sendMessage(resp.toJSONString());
+                }
             }finally {
                 lock.unlock();
             }

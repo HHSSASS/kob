@@ -20,11 +20,11 @@
         </table>
         <nav aria-label="Page navigation example">
             <ul class="pagination" style="float: right;">
-                <li @click="click_page(-2)" class="page-item"><a class="page-link" href="#">前一页</a></li>
+                <li @click="click_page(-2)" class="page-item"><a class="page-link" href="#">首页</a></li>
                 <li @click="click_page(page.number)" :class="'page-item '+page.is_active" v-for="page in pages" :key="page.number">
                     <a class="page-link" href="#">{{ page.number }}</a>
                 </li>
-                <li @click="click_page(-1)" class="page-item"><a class="page-link" href="#">后一页</a></li>
+                <li @click="click_page(-1)" class="page-item"><a class="page-link" href="#">尾页</a></li>
             </ul>
         </nav>
     </ContentField>
@@ -48,9 +48,9 @@ export default{
         let current_page=1;
 
         const click_page=page=>{
-            if(page===-2)page=current_page-1;
-            else if(page===-1)page=current_page+1;
             let max_pages=parseInt(Math.ceil(total_users/10));
+            if(page===-2)page=1;
+            else if(page===-1)page=max_pages;
             if(page>=1&&page<=max_pages){
                 pull_page(page);
             }

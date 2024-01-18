@@ -95,7 +95,6 @@ public class QQServiceImpl implements QQService {
         nameValuePairs.add(new BasicNameValuePair("oauth_consumer_key",appId));
         nameValuePairs.add(new BasicNameValuePair("openid",openid));
         getString=HttpClientUtil.get(getUserInfoUrl,nameValuePairs);
-        System.out.println(getString);
         if(getString==null) return resp;
         getResp=JSONObject.parseObject(getString);
         String username=getResp.getString("nickname");

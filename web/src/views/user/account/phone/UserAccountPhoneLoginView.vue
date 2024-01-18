@@ -3,6 +3,8 @@
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <form @submit.prevent="login">
+                    <div>该功能内测中，仅支持内测手机号码</div>
+                    &nbsp;
                     <div class="mb-3">
                         <label for="phone_number" class="form-label">手机号码</label>
                         <input v-model="phone_number" type="text" class="form-control" id="phone_number" placeholder="请输入手机号码">
@@ -73,7 +75,6 @@ export default{
                     code:verification_code.value,
                 },
                 success(resp){
-                    console.log(resp);
                     if(resp.message==="successful"){
                         localStorage.setItem("jwt_token",resp.jwt_token);
                         store.commit("updateToken",resp.jwt_token);

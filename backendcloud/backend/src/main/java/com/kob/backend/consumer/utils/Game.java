@@ -44,8 +44,8 @@ public class Game extends Thread{
             botCodeB=botB.getContent();
         }
 
-        playerA =new Player(idA,botIdA,botCodeA,rows-2,1,new ArrayList<>());
-        playerB =new Player(idB,botIdB,botCodeB,1,cols-2,new ArrayList<>());
+        playerA =new Player(idA,botIdA,botCodeA,rows-2,1,new ArrayList<>(),true);
+        playerB =new Player(idB,botIdB,botCodeB,1,cols-2,new ArrayList<>(),true);
     }
     public Player getPlayerA(){
         return playerA;
@@ -155,7 +155,7 @@ public class Game extends Thread{
         JSONObject resp=new JSONObject();
         resp.put("event","receivemove");
         resp.put("uuid",uuid);
-        if(WebSocketServer.users.get(player.getId())!=null)
+        if(player.isConnection()&&WebSocketServer.users.get(player.getId())!=null)
             WebSocketServer.users.get(player.getId()).sendMessage(resp.toJSONString());
     }
     private boolean nextStep(){//等待两名玩家下一步操作
@@ -253,9 +253,9 @@ public class Game extends Thread{
         WebSocketServer.recordMapper.insert(record);
     }
     private void sendAllMessage(String message){
-        if(WebSocketServer.users.get(playerA.getId())!=null)
+        if(playerA.isConnection()&&WebSocketServer.users.get(playerA.getId())!=null)
             WebSocketServer.users.get(playerA.getId()).sendMessage(message);
-        if(WebSocketServer.users.get(playerB.getId())!=null)
+        if(playerB.isConnection()&&WebSocketServer.users.get(playerB.getId())!=null)
             WebSocketServer.users.get(playerB.getId()).sendMessage(message);
     }
     private void sendMove(){//向两名玩家传输移动信息
@@ -283,13 +283,13 @@ public class Game extends Thread{
             Integer ratingB=WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
             if("A".equals(winner)){
                 ratingA+=5;
-                ratingB-=2;
+                ratingB-=3;
                 resp.put("a_rating",ratingA.toString()+"(+5)");
-                resp.put("b_rating",ratingB.toString()+"(-2)");
+                resp.put("b_rating",ratingB.toString()+"(-3)");
             }else if("B".equals(winner)){
-                ratingA-=2;
+                ratingA-=3;
                 ratingB+=5;
-                resp.put("a_rating",ratingA.toString()+"(-2)");
+                resp.put("a_rating",ratingA.toString()+"(-3)");
                 resp.put("b_rating",ratingB.toString()+"(+5)");
             }else{
                 resp.put("a_rating",ratingA.toString()+"(+0)");
@@ -300,15 +300,18 @@ public class Game extends Thread{
         }else{
             Integer ratingA=WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
             if("A".equals(winner)){
-                resp.put("a_rating",ratingA.toString()+"(+0)");
+                ratingA+=1;
+                resp.put("a_rating",ratingA.toString()+"(+1)");
                 resp.put("b_rating","");
             }else if("B".equals(winner)){
-                resp.put("a_rating", ratingA.toString()+"(-0)");
+                ratingA-=1;
+                resp.put("a_rating", ratingA.toString()+"(-1)");
                 resp.put("b_rating", "");
             }else{
                 resp.put("a_rating",ratingA.toString()+"(+0)");
                 resp.put("b_rating","");
             }
+            updateUserRating(playerA,ratingA);
         }
 
         saveToDataBase();
