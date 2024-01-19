@@ -81,11 +81,12 @@ public class PhoneServiceImpl implements PhoneService {
                     resp.put("jwt_token",jwt);
                     return resp;
                 }else{
-                    String username=number+'_';
+                    String username=number;
                     for (int i = 0; i < 100; i ++ ) {
                         QueryWrapper<User> usernameQueryWrapper = new QueryWrapper<>();
                         usernameQueryWrapper.eq("username", username);
                         if (userMapper.selectList(usernameQueryWrapper).isEmpty()) break;
+                        if(i==0) username+='_';
                         username += (char)(random.nextInt(10) + '0');
                         if (i == 99) return resp;
                     }

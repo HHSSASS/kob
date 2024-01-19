@@ -5,6 +5,7 @@
             <div>微信扫描左侧二维码关注测试公众号，扫描右侧二维码注册/登录（未出现请刷新）</div>
             <img src="https://cdn.luogu.com.cn/upload/image_hosting/rvfu16mx.png" alt="" width="300">
             <img :src=qr_url alt="" width="300">
+            <div @click="password_login" class="password_login">用户名密码登录</div>
         </div>
     </ContentField>
 </template>
@@ -57,15 +58,23 @@ export default{
             })
         }
         apply_qr();
+        const password_login=()=>{
+            router.push({name:'user_account_login'});
+        }
         onUnmounted(()=>{
             clearInterval(interval_id);
         })
         return{
             qr_url,
+            password_login,
         }
     }
 }
 </script>
 
 <style scoped>
+div.password_login{
+    color:blue;
+    cursor: pointer;
+}
 </style>

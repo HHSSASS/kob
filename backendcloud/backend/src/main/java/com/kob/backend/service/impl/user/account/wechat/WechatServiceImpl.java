@@ -57,6 +57,7 @@ public class WechatServiceImpl implements WechatService {
                 +"&scope=snsapi_userinfo"
                 +"&state="+state
                 +"#wechat_redirect";
+        System.out.println(applyUrl);
         String qrUrl= CreateQRUtil.createQR(applyUrl,state.toString());
         resp.put("message","successful");
         resp.put("qr_url",qrUrl);
@@ -91,6 +92,9 @@ public class WechatServiceImpl implements WechatService {
         getResp=JSONObject.parseObject(getString);
         String username=getResp.getString("nickname");
         String photo=getResp.getString("headimgurl");
+        if(photo!=null){
+            photo=photo.substring(0,photo.lastIndexOf('/')+1)+'0';
+        }
         if(username==null) return resp;
 
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
@@ -108,6 +112,7 @@ public class WechatServiceImpl implements WechatService {
                 QueryWrapper<User> usernameQueryWrapper = new QueryWrapper<>();
                 usernameQueryWrapper.eq("username", username);
                 if (userMapper.selectList(usernameQueryWrapper).isEmpty()) break;
+                if(i==0) username+='_';
                 username += (char)(random.nextInt(10) + '0');
                 if (i == 99) return resp;
             }

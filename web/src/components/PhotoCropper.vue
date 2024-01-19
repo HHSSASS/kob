@@ -11,7 +11,7 @@
                     <input ref="input" type="file" accept="image/*" @change="setImage" style="display: none;">
                     <div class="row">
                         <div class="col-6">
-                            <div style="margin-left: 30px;" v-show="imgSrc===''">
+                            <div v-show="imgSrc===''">
                                 <img src="https://app6418.acapp.acwing.com.cn/images/user.png" alt="" width="100%">
                             </div>
                             <div class="img-cropper" v-show="imgSrc!=''">
@@ -19,8 +19,7 @@
                                     ref="cropper"
                                     :aspect-ratio="1"
                                     :src="imgSrc"
-                                    :output-size="0.5"
-                                    output-type="jpeg"
+                                    containerStyle="height:50vh;width:30vw;"
                                     preview=".preview"
                                 />
                             </div>
@@ -151,13 +150,14 @@ export default {
 <style scoped>
 div.img-cropper{
     margin: auto;
-    width: 80%;
+    width: 100%;
     height: 100%;
 }
 div.preview {
     margin: auto;
-    width: 60%;
-    height: 500px;
+    margin-top: 5vh;
+    width: 100%;
+    height: 40vh;
     border-radius: 50%;
     overflow: hidden;
 }

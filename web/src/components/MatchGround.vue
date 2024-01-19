@@ -104,11 +104,11 @@ div.user-photo{
 }
 div.user-photo>img{
     border-radius: 50%;
-    width: 20vh;
+    width: 80%;
 }
 div.user-username{
     text-align: center;
-    font-size: 24px;
+    font-size: 2vw;
     font-weight: 600;
     color: white;
     padding-top: 2vh;

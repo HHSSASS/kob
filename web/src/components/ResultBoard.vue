@@ -63,13 +63,13 @@ div.result-board{
 div.result-board-text{
     text-align: center;
     color:white;
-    font-size: 40px;
+    font-size: 3vw;
     font-weight: 600;
     font-style: italic;
-    padding-top: 5vh;
+    padding-top: 3vh;
 }
 div.result-board-btn{
     text-align: center;
-    padding-top: 4vh;
+    padding-top: 3vh;
 }
 </style>

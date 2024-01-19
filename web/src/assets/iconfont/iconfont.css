@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4401800 */
-  src: url('iconfont.woff2?t=1705254747752') format('woff2'),
-       url('iconfont.woff?t=1705254747752') format('woff'),
-       url('iconfont.ttf?t=1705254747752') format('truetype');
+  src: url('iconfont.woff2?t=1705636553519') format('woff2'),
+       url('iconfont.woff?t=1705636553519') format('woff'),
+       url('iconfont.ttf?t=1705636553519') format('truetype');
 }
 
 .iconfont {
@@ -13,12 +13,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-hongseshouji-X:before {
-  content: "\e610";
+.icon-shangxiazuoyouTriangle15:before {
+  content: "\e692";
 }
 
-.icon-shouji1:before {
-  content: "\e602";
+.icon-shangxiazuoyouTriangle17:before {
+  content: "\e693";
+}
+
+.icon-shangxiazuoyouTriangle16:before {
+  content: "\e694";
+}
+
+.icon-shangxiazuoyouTriangle18:before {
+  content: "\e695";
+}
+
+.icon-hongseshouji-X:before {
+  content: "\e610";
 }
 
 .icon-mima:before {

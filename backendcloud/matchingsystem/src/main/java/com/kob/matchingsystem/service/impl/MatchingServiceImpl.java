@@ -16,8 +16,9 @@ public class MatchingServiceImpl implements MatchingService {
 
     @Override
     public String removePlayer(Integer userId) {
-        matchingPool.removePlayer(userId);
-        System.out.println("remove"+userId);
+        if(matchingPool.removePlayer(userId)){
+            System.out.println("remove"+userId);
+        }
         return "remove successfully";
     }
 }

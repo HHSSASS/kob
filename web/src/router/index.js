@@ -11,7 +11,7 @@ import UserAccountRegisterView from "../views/user/account/UserAccountRegisterVi
 import UserAccountPhoneLoginView from "../views/user/account/phone/UserAccountPhoneLoginView"
 import UserAccountWechatLoginView from "../views/user/account/wechat/UserAccountWechatLoginView"
 import UserAccountWechatAuthView from "../views/user/account/wechat/UserAccountWechatAuthView"
-import UserAccountQQLoginView from "../views/user/account/qq/UserAccountQQLoginView"
+import UserAccountQQAuthView from "../views/user/account/qq/UserAccountQQAuthView"
 import store from '../store/index'
 
 const routes = [
@@ -112,9 +112,9 @@ const routes = [
     }
   },
   {
-    path:"/user/account/qq/login/",
-    name:"user_account_qq_login",
-    component:UserAccountQQLoginView,
+    path:"/user/account/qq/auth/",
+    name:"user_account_qq_auth",
+    component:UserAccountQQAuthView,
     meta:{
       requestAuth:false
     }

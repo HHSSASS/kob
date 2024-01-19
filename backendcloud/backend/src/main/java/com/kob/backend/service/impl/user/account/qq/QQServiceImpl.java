@@ -26,7 +26,7 @@ import java.util.Random;
 public class QQServiceImpl implements QQService {
     private final static String appId="102084267";
     private final static String appSecret="53mOmzymLlwwhHcm";
-    private final static String redirectUrl="https://app6418.acapp.acwing.com.cn/api/user/account/qq/applyinfo/";
+    private final static String redirectUrl="https://app6418.acapp.acwing.com.cn/user/account/qq/auth";
     private final static String applyAccessTokenUrl="https://graph.qq.com/oauth2.0/token";
     private final static String applyOpenidUrl="https://graph.qq.com/oauth2.0/me";
     private final static String getUserInfoUrl="https://graph.qq.com/user/get_user_info";
@@ -47,13 +47,13 @@ public class QQServiceImpl implements QQService {
         redisTemplate.expire(state.toString(), Duration.ofMinutes(10));
         String encodeUrl="";
         try{
-            encodeUrl= URLEncoder.encode(redirectUrl+state,"UTF-8");
+            encodeUrl= URLEncoder.encode(redirectUrl,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             resp.put("message","failed");
             return resp;
         }
-        String applyUrl="https://graph.qq.com/oauth2.0/authorize?response_type=token"
+        String applyUrl="https://graph.qq.com/oauth2.0/authorize?response_type=code"
                 +"&client_id="+appId
                 +"&redirect_uri="+encodeUrl
                 +"&state="+state
@@ -78,15 +78,15 @@ public class QQServiceImpl implements QQService {
         nameValuePairs.add(new BasicNameValuePair("redirect_uri",redirectUrl));
         String getString= HttpClientUtil.get(applyAccessTokenUrl,nameValuePairs);
         if(getString==null) return resp;
-        JSONObject getResp=JSONObject.parseObject(getString);
-        String accessToken=getResp.getString("access_token");
+        String[] strs=getString.split("&");
+        String accessToken=strs[0].substring(strs[0].indexOf("=")+1);
         if(accessToken==null) return resp;
 
         nameValuePairs=new LinkedList<>();//获取openid
         nameValuePairs.add(new BasicNameValuePair("access_token",accessToken));
         getString= HttpClientUtil.get(applyOpenidUrl,nameValuePairs);
         if(getString==null) return resp;
-        getResp=JSONObject.parseObject(getString);
+        JSONObject getResp=JSONObject.parseObject(getString.substring(10,getString.length()-3));
         String openid=getResp.getString("openid");
         if(openid==null) return resp;
 
@@ -98,11 +98,12 @@ public class QQServiceImpl implements QQService {
         if(getString==null) return resp;
         getResp=JSONObject.parseObject(getString);
         String username=getResp.getString("nickname");
-        String photo=getResp.getString("figureurl_qq_1");
+        String photo=getResp.getString("figureurl_qq_2");
+        if(photo==null) photo=getResp.getString("figureurl_qq_1");
         if(username==null) return resp;
 
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("wechat_openid",openid);
+        queryWrapper.eq("qq_openid",openid);
         List<User> users=userMapper.selectList(queryWrapper);
         if(!users.isEmpty()){
             User user=users.get(0);
@@ -115,16 +116,17 @@ public class QQServiceImpl implements QQService {
                 QueryWrapper<User> usernameQueryWrapper = new QueryWrapper<>();
                 usernameQueryWrapper.eq("username", username);
                 if (userMapper.selectList(usernameQueryWrapper).isEmpty()) break;
+                if(i==0) username+='_';
                 username += (char)(random.nextInt(10) + '0');
                 if (i == 99) return resp;
             }
-            User user=new User(null,username,photo,null,null,openid,null,0);
+            User user=new User(null,username,photo,null,null,null,openid,0);
             userMapper.insert(user);
             if(DownloadPhotoUtil.downloadPhoto(photo,"/home/hh/kob/images/photo/"+user.getId().toString()+".jpeg")){
                 photo="https://app6418.acapp.acwing.com.cn/images/photo/"+user.getId().toString()+".jpeg";
             }
             else photo=null;
-            User new_user=new User(user.getId(),username,photo,null,null,openid,null,0);
+            User new_user=new User(user.getId(),username,photo,null,null,null,openid,0);
             userMapper.updateById(new_user);
             String jwt= JwtUtil.createJWT(user.getId().toString());
             resp.put("message","successful");

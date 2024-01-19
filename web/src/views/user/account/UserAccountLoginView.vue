@@ -1,7 +1,7 @@
 <template>
     <ContentField>
-        <div class="row justify-content-md-center">
-            <div class="col-3">
+        <div class="row">
+            <div class="col-4" style="margin: auto;">
                 <form @submit.prevent="login">
                     <div class="mb-3">
                         <label for="username" class="form-label">用户名</label>
@@ -12,21 +12,20 @@
                         <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
                     </div>
                     <div class="error-message">{{message}}</div>
-                    <div @click="register" class="register">还没有账号？立即注册！</div>
+                    <div @click="register" class="register">没有账号？立即注册！</div>
                     <button type="submit" class="btn btn-primary">登录</button>
                 </form>
+                <div style="padding-top: 20px;text-align: center;">一键注册登录：</div>
                 <div class="oauth">
-                    <div style="padding-top: 10px;">一键注册登录:</div>
-                    &nbsp;
-                    <i @click="phone_login" class="iconfont icon-hongseshouji-X" style="cursor: pointer;font-size:35px;color: rgb(31, 92, 190);"></i>
+                    <div style="cursor: pointer;padding-top: 10px;">
+                        <img @click="qq_login" width="28" src="https://cdn.luogu.com.cn/upload/image_hosting/8vl3e7h4.png" alt="">
+                    </div>
                     &nbsp;
                     <div style="cursor: pointer;padding-top: 12px;">
                         <img @click="wechat_login" width="30" src="https://cdn.luogu.com.cn/upload/image_hosting/jvmtthfg.png" alt="">
                     </div>
                     &nbsp;
-                    <div style="cursor: pointer;padding-top: 12px;">
-                        <img @click="qq_login" width="28" src="https://cdn.luogu.com.cn/upload/image_hosting/8vl3e7h4.png" alt="">
-                    </div>
+                    <i @click="phone_login" class="iconfont icon-hongseshouji-X" style="cursor: pointer;font-size:35px;color: rgb(31, 92, 190);"></i>
                 </div>
             </div>
         </div>
@@ -86,7 +85,6 @@ export default{
                     }
                 }
             })
-            //router.push({name:'user_account_qq_login'});
         }
         return{
             username,
@@ -115,7 +113,6 @@ div.register{
 }
 div.oauth{
     display: flex;
-    text-align: center; 
-    margin-top: 20px; 
+    justify-content: center;
 }
 </style>

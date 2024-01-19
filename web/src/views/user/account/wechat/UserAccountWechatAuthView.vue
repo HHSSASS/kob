@@ -1,8 +1,8 @@
 <template>
     <ContentField>
-        <div style="text-align: center;font-size: 50px;">
-            授权成功
-        </div>
+        <div style="text-align: center;font-size: 50px;">授权成功</div>
+        &nbsp;
+        <div style="text-align: center;font-size: 20px;">若长时间未跳转至首页请重试或使用其他登录方式</div>
     </ContentField>
 </template>
 

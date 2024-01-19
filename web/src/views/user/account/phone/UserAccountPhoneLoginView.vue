@@ -1,9 +1,9 @@
 <template>
     <ContentField>
-        <div class="row justify-content-md-center">
-            <div class="col-3">
+        <div class="row">
+            <div class="col-4" style="margin: auto;">
                 <form @submit.prevent="login">
-                    <div>该功能内测中，仅支持内测手机号码</div>
+                    <div style="text-align: center;">该功能内测中，仅支持内测手机号码</div>
                     &nbsp;
                     <div class="mb-3">
                         <label for="phone_number" class="form-label">手机号码</label>

@@ -1,5 +1,6 @@
 <template>
-    <RuleBoard></RuleBoard>
+    <ErrorBoard v-if="error"></ErrorBoard>
+    <RuleBoard v-if="$store.state.pk.status!='playing'"></RuleBoard>
     <PlayGround v-if="$store.state.pk.status==='playing'"></PlayGround>
     <MatchGround v-else></MatchGround>
     <ResultBoard v-if="$store.state.pk.winner!='none'"></ResultBoard>
@@ -10,8 +11,10 @@ import PlayGround from '../../components/PlayGround.vue'
 import MatchGround from '../../components/MatchGround.vue'
 import ResultBoard from '../../components/ResultBoard.vue'
 import RuleBoard from '../../components/RuleBoard.vue'
+import ErrorBoard from '@/components/ErrorBoard.vue'
 import { onMounted,onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+import { ref } from 'vue'
 
 export default{
     components:{
@@ -19,6 +22,7 @@ export default{
         MatchGround,
         ResultBoard,
         RuleBoard,
+        ErrorBoard
     },
     setup(){
         const store=useStore();
@@ -26,6 +30,7 @@ export default{
         let socket=null;
         let interval_id;
         let heartbeat_id;
+        let error=ref(false);
         store.commit("updateWinner","none");
         store.commit("updateIsRecord",false);
         const start_counter=()=>{
@@ -101,6 +106,12 @@ export default{
                     }
                 }else if(data.event==="heartbeat"){
                     //console.log("heartbeat");
+                }else if(data.event==="error"){
+                    error.value=true;
+                    setTimeout(()=>{
+                        store.dispatch("logout");
+                        location.reload();
+                    },2000);
                 }
             }
             socket.onclose=()=>{
@@ -114,6 +125,9 @@ export default{
             store.commit("updateUuid","");
             clearInterval(interval_id);
         })
+        return{
+            error,
+        }
     }
 }
 </script>

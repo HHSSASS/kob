@@ -1,7 +1,7 @@
 <template>
     <ContentField>
-        <div class="row justify-content-md-center">
-            <div class="col-3">
+        <div class="row">
+            <div class="col-4" style="margin: auto;">
                 <form @submit.prevent="register">
                     <div class="mb-3">
                         <label for="username" class="form-label">用户名</label>
@@ -16,6 +16,7 @@
                         <input v-model="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="请再次输入密码">
                     </div>
                     <div class="error-message">{{message}}</div>
+                    <div @click="login" class="login">已有账号？立即登录！</div>
                     <button type="submit" class="btn btn-primary">注册</button>
                 </form>
             </div>
@@ -57,12 +58,16 @@ export default{
                 },
             })
         }
+        const login=()=>{
+            router.push({name:'user_account_login'});
+        }
         return{
             username,
             password,
             confirmPassword,
             message,
             register,
+            login,
         }
     }
 }
@@ -74,5 +79,9 @@ button{
 }
 div.error-message{
     color:red;
+}
+div.login{
+    color:blue;
+    cursor: pointer;
 }
 </style>

@@ -28,18 +28,20 @@ public class MatchingPool extends Thread{
             lock.unlock();
         }
     }
-    public void removePlayer(Integer userId){
+    public boolean removePlayer(Integer userId){
+        boolean flag=false;
         lock.lock();
         try{
             List<Player> newPlayers=new ArrayList<>();
             for(Player player:players){
                 if(!player.getUserId().equals(userId)){
                     newPlayers.add(player);
-                }
+                }else flag=true;
             }
             players=newPlayers;
         }finally {
             lock.unlock();
+            return flag;
         }
     }
     private void increaseWaitingTime(){//将所有等待玩家等待时间加一

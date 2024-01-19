@@ -61,6 +61,12 @@ public class WebSocketServer {
         Integer userId= JwtAuthentication.getUserId(token);//解析token
         this.user=userMapper.selectById(userId);
         if(this.user!=null){
+            if(users.get(user.getId())!=null){
+                JSONObject resp=new JSONObject();
+                resp.put("event","error");
+                users.get(user.getId()).sendMessage(resp.toJSONString());
+                users.get(user.getId()).session.close();
+            }
             users.put(userId,this);
         }
         else{
@@ -121,10 +127,13 @@ public class WebSocketServer {
 
         Game game=new Game(uuid.toString(),13,14,20,a.getId(),botA,b.getId(),botB);
         game.createMap();
-        if(users.get(a.getId())!=null)
+        if(users.get(a.getId())!=null){
             users.get(a.getId()).game=game;
-        if(users.get(b.getId())!=null)
+        }
+        if(users.get(b.getId())!=null){
             users.get(b.getId()).game=game;
+        }
+
 
         JSONObject respGame=new JSONObject();
         respGame.put("uuid",uuid.toString());

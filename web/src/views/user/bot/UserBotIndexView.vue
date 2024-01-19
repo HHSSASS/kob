@@ -260,7 +260,7 @@ div.update_photo{
 div.update_photo_text{
     text-align: center;
     color:white;
-    font-size: 40px;
+    font-size: 3vw;
     font-weight: 500;
     padding-top: 30%;
 }
