@@ -90,6 +90,11 @@ public class WechatServiceImpl implements WechatService {
         if(getString==null) return resp;
         getResp=JSONObject.parseObject(getString);
         String username=getResp.getString("nickname");
+        try {
+            username = new String(username.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String photo=getResp.getString("headimgurl");
         if(photo!=null){
             photo=photo.substring(0,photo.lastIndexOf('/')+1)+'0';
