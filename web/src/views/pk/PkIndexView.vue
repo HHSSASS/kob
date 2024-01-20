@@ -1,6 +1,5 @@
 <template>
     <ErrorBoard v-if="error"></ErrorBoard>
-    <RuleBoard v-if="$store.state.pk.status!='playing'"></RuleBoard>
     <PlayGround v-if="$store.state.pk.status==='playing'"></PlayGround>
     <MatchGround v-else></MatchGround>
     <ResultBoard v-if="$store.state.pk.winner!='none'"></ResultBoard>
@@ -10,21 +9,21 @@
 import PlayGround from '../../components/PlayGround.vue'
 import MatchGround from '../../components/MatchGround.vue'
 import ResultBoard from '../../components/ResultBoard.vue'
-import RuleBoard from '../../components/RuleBoard.vue'
 import ErrorBoard from '@/components/ErrorBoard.vue'
 import { onMounted,onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import { ref } from 'vue'
+import { getCurrentInstance } from 'vue'
 
 export default{
     components:{
         PlayGround,
         MatchGround,
         ResultBoard,
-        RuleBoard,
         ErrorBoard
     },
     setup(){
+        const { proxy } = getCurrentInstance();
         const store=useStore();
         const socketurl=`wss://app6418.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
         let socket=null;
@@ -125,6 +124,11 @@ export default{
             store.commit("updateUuid","");
             clearInterval(interval_id);
         })
+        document.addEventListener('visibilitychange',()=>{
+            if(proxy.equipment!=null&&document.visibilityState=='visible') {
+                location.reload();
+            }
+        });
         return{
             error,
         }

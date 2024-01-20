@@ -57,7 +57,6 @@ public class WechatServiceImpl implements WechatService {
                 +"&scope=snsapi_userinfo"
                 +"&state="+state
                 +"#wechat_redirect";
-        System.out.println(applyUrl);
         String qrUrl= CreateQRUtil.createQR(applyUrl,state.toString());
         resp.put("message","successful");
         resp.put("qr_url",qrUrl);

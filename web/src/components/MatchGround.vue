@@ -1,9 +1,12 @@
 <template>
     <div class="matchground">
         <div class="row">
+            <div class="col-12">
+                <RuleBoard></RuleBoard>
+            </div>
             <div class="col-4">
                 <div class="user-photo">
-                    <img :src="$store.state.user.photo" alt="">
+                    <img :src="$store.state.user.photo" alt="" :style="proxy.equipment==null?'width:40%':'width:90%'">
                 </div>
                 <div class="user-username">
                     {{ $store.state.user.username }}
@@ -19,7 +22,7 @@
             </div>
             <div class="col-4">
                 <div class="user-photo">
-                    <img :src="$store.state.pk.opponent_photo" alt="">
+                    <img :src="$store.state.pk.opponent_photo" alt="" :style="{'width':proxy.equipment==null?'40%':'90%'}">
                 </div>
                 <div class="user-username">
                     {{ $store.state.pk.opponent_username }}
@@ -41,9 +44,16 @@
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import $ from 'jquery';
+import RuleBoard from '@/components/RuleBoard.vue'
+import { getCurrentInstance } from 'vue'
+
 
 export default{
+    components:{
+        RuleBoard,
+    },
     setup(){
+        const { proxy } = getCurrentInstance();
         const store=useStore();
         let bots=ref([]);
         let select_bot=ref("-1");
@@ -86,6 +96,7 @@ export default{
             click_pve_btn,
             bots,
             select_bot,
+            proxy,
         }
     }
 }
@@ -93,7 +104,7 @@ export default{
 
 <style scoped>
 div.matchground{
-    width:60vw;
+    width: 100%;
     height: 70vh;
     margin: 40px auto;
     background-color: rgb(50,50,50,0.5);
@@ -102,9 +113,12 @@ div.user-photo{
     text-align: center;
     padding-top: 10vh;
 }
+div.user-photo-phone{
+    text-align: center;
+    padding-top: 10vh;
+}
 div.user-photo>img{
     border-radius: 50%;
-    width: 80%;
 }
 div.user-username{
     text-align: center;

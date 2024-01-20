@@ -1,23 +1,25 @@
 <template>
     <ContentField>
-        <table class="table table-hover" style="text-align: center;">
-            <thead>
-                <tr>
-                    <th>玩家</th>
-                    <th>天梯分</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="user in users" :key="user.id">
-                    <td>
-                        <img :src="user.photo" alt="" class="user-photo">
-                        &nbsp;
-                        <span class="user-username">{{ user.username }}</span>
-                    </td>
-                    <td>{{ user.rating }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th>玩家</th>
+                        <th>天梯分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in users" :key="user.id">
+                        <td>
+                            <img :src="user.photo" alt="" class="user-photo">
+                            &nbsp;
+                            <span class="user-username">{{ user.username }}</span>
+                        </td>
+                        <td>{{ user.rating }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination" style="float: right;">
                 <li @click="click_page(-2)" class="page-item"><a class="page-link" href="#">首页</a></li>
@@ -99,6 +101,12 @@ export default{
 </script>
 
 <style scoped>
+div.table-responsive>table>thead>tr>th {
+    white-space: nowrap;
+}
+div.table-responsive>table>tbody>tr>td {
+    white-space: nowrap;
+}
 img.user-photo{
     width: 4vh;
     border-radius: 50%;

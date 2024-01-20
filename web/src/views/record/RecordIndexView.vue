@@ -1,35 +1,41 @@
 <template>
     <ContentField>
-        <table class="table table-hover" style="text-align: center;">
-            <thead>
-                <tr>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>对战结果</th>
-                    <th>对战时间</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="record in records" :key="record.record.id">
-                    <td>
-                        <img :src="record.a_photo" alt="" class="record-user-photo">
-                        &nbsp;
-                        <span class="record-user-username">{{ record.a_username }}</span>
-                    </td>
-                    <td>
-                        <img :src="record.b_photo" alt="" class="record-user-photo">
-                        &nbsp;
-                        <span class="record-user-username">{{ record.b_username }}</span>
-                    </td>
-                    <td>{{ record.result }}</td>
-                    <td>{{ record.record.createtime }}</td>
-                    <td>
-                        <button @click="open_record_content(record.record.id)" type="button" class="btn btn-secondary">查看录像</button>                                                
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>结果</th>
+                        <th>对战时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="record in records" :key="record.record.id">
+                        <td>
+                            <img :src="record.a_photo" alt="" class="record-user-photo">
+                            &nbsp;
+                            <span class="record-user-username">{{ record.a_username }}</span>
+                        </td>
+                        <td>
+                            <img :src="record.b_photo" alt="" class="record-user-photo">
+                            &nbsp;
+                            <span class="record-user-username">{{ record.b_username }}</span>
+                        </td>
+                        <td>{{ record.result }}</td>
+                        <td>
+                            <span>{{ record.record.createtime.slice(0,10) }}</span>
+                            <br>
+                            <span>{{ record.record.createtime.slice(11) }}</span>
+                        </td>
+                        <td>
+                            <button @click="open_record_content(record.record.id)" type="button" class="btn btn-secondary">查看录像</button>                                                
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination" style="float: right;">
                 <li @click="click_page(-2)" class="page-item"><a class="page-link" href="#">首页</a></li>
@@ -154,6 +160,12 @@ export default{
 </script>
 
 <style scoped>
+div.table-responsive>table>thead>tr>th {
+    white-space: nowrap;
+}
+div.table-responsive>table>tbody>tr>td {
+    white-space: nowrap;
+}
 img.record-user-photo{
     width: 4vh;
     border-radius: 50%;

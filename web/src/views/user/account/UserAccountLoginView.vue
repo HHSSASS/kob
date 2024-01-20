@@ -1,7 +1,7 @@
 <template>
     <ContentField>
         <div class="row">
-            <div class="col-4" style="margin: auto;">
+            <div :class="proxy.equipment==null?'col-3':'col-12'" style="margin: auto;">
                 <form @submit.prevent="login">
                     <div class="mb-3">
                         <label for="username" class="form-label">用户名</label>
@@ -39,12 +39,14 @@ import { useStore } from "vuex";
 import { ref } from "vue";
 import router from '../../../router/index'
 import $ from "jquery";
+import { getCurrentInstance } from 'vue'
 
 export default{
     components:{
         ContentField
     },
     setup(){
+        const { proxy } = getCurrentInstance();
         const store=useStore();
         let username=ref('');
         let password=ref('');
@@ -95,6 +97,7 @@ export default{
             phone_login,
             wechat_login,
             qq_login,
+            proxy,
         }
     }
 }

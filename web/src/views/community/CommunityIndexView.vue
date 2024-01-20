@@ -1,8 +1,8 @@
 <template>
-    <ContentField>
+    <div class="container" style="max-width: 800px;">
         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#add">发布新帖</button>
         <div class="modal fade" id="add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">发布新帖</h1>
@@ -11,103 +11,98 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="exampleFormControlTextarea1" class="form-label">内容</label>
-                            <textarea v-model="postadd.content" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="请输入内容"></textarea>
-                            <div style="float: right;">字数：{{ postadd.content.length }}/200</div>
+                            <textarea v-model="postadd.content" class="form-control" id="exampleFormControlTextarea1" rows="8" placeholder="请输入内容"></textarea>
+                            <div style="float: right;">字数：{{ postadd.content.length }}/500</div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="error-message">{{ postadd.message }}</div>
-                        <button type="button" class="btn btn-primary" @click="add_post">发布</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="float: right">取消</button>
+                        <button type="button" class="btn btn-primary" @click="add_post" style="float: right;">发布</button>
+                        <div class="error-message" style="float: right">{{ postadd.message }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <table class="table table-hover" style="text-align: center;">
-            <thead>
-                <tr>
-                    <th>玩家</th>
-                    <th>帖子</th>
-                    <th>发布时间</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="post in posts" :key="post.post.id">
-                    <td>
-                        <img :src="post.photo" alt="" class="post-photo">
-                        &nbsp;
-                        <span class="post-username">{{ post.username }}</span>
-                    </td>
-                    <td>{{ post.post.content }}</td>
-                    <td>{{ post.post.createtime }}</td>
-                    <td>
-                        <i @click="remove_like(post)" class="iconfont icon-aixin" style="color: red;cursor: pointer;" v-if="like_posts.indexOf(post.post.id)!=-1"></i>
-                        <i @click="add_like(post)" class="iconfont icon-aixinD" style="cursor: pointer;" v-else></i>
-                        <div>{{ post.likes_count }}</div>
-                        <i @click="pull_comment_page(post,1)" class="iconfont icon-pinglun" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#comment"></i>
-                        <div class="modal fade" id="comment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">评论</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table class="table table-hover" style="text-align: center;">
-                                            <thead>
-                                                <tr>
-                                                    <th>玩家</th>
-                                                    <th>评论</th>
-                                                    <th>评论时间</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="comment in comments" :key="comment.comment.id">
-                                                    <td>
+        <br><br>
+        <div class="card-list">
+            <div class="card" v-for="post in posts" :key="post.post.id" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <img :src="post.photo" alt="" class="post-photo">
+                    &nbsp;
+                    <span class="post-username">{{ post.username }}</span>
+                    <span style="float: right;">{{ post.post.createtime }}</span>
+                </div>
+                <div class="card-body">
+                    <div>{{ post.post.content }}</div>
+                </div>
+                <div class="card-footer">
+                    <div class="row" style="text-align: center;">
+                        <div class="col-4">
+                            <span @click="remove_like(post)" class="iconfont icon-aixin" style="color: red;cursor: pointer;" v-if="like_posts.indexOf(post.post.id)!=-1"></span>
+                            <span @click="add_like(post)" class="iconfont icon-aixinD" style="cursor: pointer;" v-else></span>
+                            &nbsp;
+                            <span>{{ post.likes_count }}</span>
+                        </div>
+                        <div class="col-4">
+                            <span @click="pull_comment_page(post,1)" class="iconfont icon-pinglun" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#comment" ></span>
+                            
+                            <div class="modal fade" id="comment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content" style="text-align: left;">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">评论</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card-list">
+                                                <div class="card" v-for="comment in comments" :key="comment.comment.id" style="margin-bottom: 20px;">
+                                                    <div class="card-header">
                                                         <img :src="comment.photo" alt="" class="comment-photo">
                                                         &nbsp;
                                                         <span class="comment-username">{{ comment.username }}</span>
-                                                    </td>
-                                                    <td>{{ comment.comment.content }}</td>
-                                                    <td>{{ comment.comment.createtime }}</td>
-                                                    <td>
-                                                        <i @click="remove_comment(comment)" class="iconfont icon-shanchu" style="cursor: pointer;" v-if="parseInt(comment.comment.userId)===parseInt($store.state.user.id)"></i>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination" style="float: right;">
-                                                <li @click="click_comment_page(-2)" class="page-item"><a class="page-link" href="#">首页</a></li>
-                                                <li @click="click_comment_page(comment_page.number)" :class="'page-item '+comment_page.is_active" v-for="comment_page in comment_pages" :key="comment_page.number">
-                                                    <a class="page-link" href="#">{{ comment_page.number }}</a>
-                                                </li>
-                                                <li @click="click_comment_page(-1)" class="page-item"><a class="page-link" href="#">尾页</a></li>
-                                            </ul>
-                                        </nav>
-                                        &nbsp;
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label" style="float: left;">发布评论</label>
-                                            <textarea v-model="commentadd.content" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="请输入内容"></textarea>
-                                            <div style="float: right;">字数：{{ commentadd.content.length }}/200</div>
+                                                        &nbsp;
+                                                        <span @click="remove_comment(comment)" class="iconfont icon-shanchu" style="cursor: pointer;" v-if="parseInt(comment.comment.userId)===parseInt($store.state.user.id)"></span>
+                                                        <span style="float: right;">{{ comment.comment.createtime }}</span>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div>{{ comment.comment.content }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination" style="float: right;">
+                                                    <li @click="click_comment_page(-2)" class="page-item"><a class="page-link" href="#">首页</a></li>
+                                                    <li @click="click_comment_page(comment_page.number)" :class="'page-item '+comment_page.is_active" v-for="comment_page in comment_pages" :key="comment_page.number">
+                                                        <a class="page-link" href="#">{{ comment_page.number }}</a>
+                                                    </li>
+                                                    <li @click="click_comment_page(-1)" class="page-item"><a class="page-link" href="#">尾页</a></li>
+                                                </ul>
+                                            </nav>          
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="error-message">{{ commentadd.message }}</div>
-                                        <button type="button" class="btn btn-primary" @click="add_comment()">发布</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        <div class="modal-footer">
+                                            <label for="exampleFormControlTextarea1" class="form-label" style="padding-top: 5px;">发布评论</label>
+                                            <textarea v-model="commentadd.content" class="form-control" id="exampleFormControlTextarea1" rows="6" placeholder="请输入内容"></textarea>
+                                            <div style="float: right;">字数：{{ commentadd.content.length }}/500</div>
+                                            <br>
+                                            <br>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="float: right;">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="add_comment()" style="float: right;">发布</button>
+                                            <div class="error-message" style="float: right;">{{ commentadd.message }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            &nbsp;
+                            <span>{{ post.comments_count }}</span>
                         </div>
-                        <div>{{ post.comments_count }}</div>
-                        <i @click="remove_post(post)" class="iconfont icon-shanchu" style="cursor: pointer;" v-if="parseInt(post.post.userId)===parseInt($store.state.user.id)"></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <div class="col-4">
+                            <span @click="remove_post(post)" class="iconfont icon-shanchu" style="cursor: pointer;" v-if="parseInt(post.post.userId)===parseInt($store.state.user.id)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination" style="float: right;">
                 <li @click="click_page(-2)" class="page-item"><a class="page-link" href="#">首页</a></li>
@@ -117,11 +112,10 @@
                 <li @click="click_page(-1)" class="page-item"><a class="page-link" href="#">尾页</a></li>
             </ul>
         </nav>
-    </ContentField>
+    </div>
 </template>
 
 <script>
-import ContentField from "../../components/ContentField.vue"
 import '../../assets/iconfont/iconfont.css'
 import $ from 'jquery';
 import { useStore } from "vuex";
@@ -130,7 +124,6 @@ import { Modal } from 'bootstrap/dist/js/bootstrap'
 
 export default{
     components:{
-        ContentField
     },
     setup(){
         const store=useStore();
@@ -389,5 +382,8 @@ img.comment-photo{
 }
 div.error-message{
     color:red;
+}
+div.modal-footer{
+    display: block;
 }
 </style>

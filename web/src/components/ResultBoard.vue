@@ -1,5 +1,5 @@
 <template>
-    <div class="result-board">
+    <div class="result-board" :style="proxy.equipment==null?'width:30vw;left: 35vw;':'width:100%'">
         <div class="result-board-text" v-if="$store.state.pk.winner==='all'&&$store.state.pk.a_id==$store.state.user.id">
             <div>Draw</div>
             <div>天梯分：{{ $store.state.pk.a_rating }}</div>
@@ -32,10 +32,12 @@
 
 <script>
 import { useStore } from 'vuex';
+import { getCurrentInstance } from 'vue'
 
 export default{
     setup(){
         const store=useStore();
+        const { proxy } = getCurrentInstance();
         const restart=()=>{
             store.commit("updateStatus","menu");
             store.commit("updateWinner","none");
@@ -46,6 +48,7 @@ export default{
         }
         return{
             restart,
+            proxy,
         }
     }
 }
@@ -54,22 +57,20 @@ export default{
 <style scoped>
 div.result-board{
     height: 30vh;
-    width: 30vw;
     background-color: rgba(50,50,50,0.5);
     position: absolute;
     top: 30vh;
-    left: 35vw;
 }
 div.result-board-text{
     text-align: center;
     color:white;
-    font-size: 3vw;
+    font-size: 2.5rem;
     font-weight: 600;
     font-style: italic;
     padding-top: 3vh;
 }
 div.result-board-btn{
     text-align: center;
-    padding-top: 3vh;
+    padding-top: 2.5vh;
 }
 </style>

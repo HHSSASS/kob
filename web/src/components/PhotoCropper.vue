@@ -1,7 +1,7 @@
 <template>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cropper_model" ref="show" style="display: none;"></button>
     <div class="modal fade" id="cropper_model" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">头像裁剪</h1>
@@ -19,7 +19,7 @@
                                     ref="cropper"
                                     :aspect-ratio="1"
                                     :src="imgSrc"
-                                    containerStyle="height:50vh;width:30vw;"
+                                    containerStyle="height:40vh;width:20vw;"
                                     preview=".preview"
                                 />
                             </div>
@@ -64,6 +64,7 @@ export default {
             show.value.click();
         })
         const cropImage=()=>{
+            message.value="";
             var canvas=cropper.value.getCroppedCanvas();
             if(canvas==null){
                 message.value="请选取图片";
@@ -109,6 +110,7 @@ export default {
             }
         }
         const setImage=(e)=>{
+            message.value="";
             const file = e.target.files[0];
             if(file==null) return;
             if(file.size/1024/1024>1){
@@ -157,7 +159,7 @@ div.preview {
     margin: auto;
     margin-top: 5vh;
     width: 100%;
-    height: 40vh;
+    height: 30vh;
     border-radius: 50%;
     overflow: hidden;
 }

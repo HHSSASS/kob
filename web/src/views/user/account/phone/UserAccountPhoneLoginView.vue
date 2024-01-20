@@ -1,7 +1,7 @@
 <template>
     <ContentField>
         <div class="row">
-            <div class="col-4" style="margin: auto;">
+            <div :class="proxy.equipment==null?'col-3':'col-12'" style="margin: auto;">
                 <form @submit.prevent="login">
                     <div style="text-align: center;">该功能内测中，仅支持内测手机号码</div>
                     &nbsp;
@@ -30,12 +30,14 @@ import { useStore } from "vuex";
 import { onUnmounted } from "vue";
 import router from '@/router/index'
 import $ from "jquery"
+import { getCurrentInstance } from 'vue'
 
 export default{
     components:{
         ContentField
     },
     setup(){
+        const { proxy } = getCurrentInstance();
         const store=useStore();
         let phone_number=ref('');
         let verification_code=ref('');
@@ -101,6 +103,7 @@ export default{
             apply_code,
             login,
             password_login,
+            proxy,
         }
     }
 }

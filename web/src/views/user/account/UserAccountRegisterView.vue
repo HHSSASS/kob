@@ -1,7 +1,7 @@
 <template>
     <ContentField>
         <div class="row">
-            <div class="col-4" style="margin: auto;">
+            <div :class="proxy.equipment==null?'col-3':'col-12'" style="margin: auto;">
                 <form @submit.prevent="register">
                     <div class="mb-3">
                         <label for="username" class="form-label">用户名</label>
@@ -29,12 +29,14 @@ import ContentField from "../../../components/ContentField.vue"
 import { ref } from "vue";
 import router from '../../../router/index'
 import $ from 'jquery'
+import { getCurrentInstance } from 'vue'
 
 export default{
     components:{
         ContentField
     },
     setup(){
+        const { proxy } = getCurrentInstance();
         let username=ref('');
         let password=ref('');
         let confirmPassword=ref('');
@@ -68,6 +70,7 @@ export default{
             message,
             register,
             login,
+            proxy,
         }
     }
 }

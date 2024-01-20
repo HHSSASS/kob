@@ -36,8 +36,8 @@ public class AddPostServiceImpl implements AddPostService {
             map.put("message","内容不能为空");
             return map;
         }
-        if(content.length()>200){
-            map.put("message","内容长度大于超过200");
+        if(content.length()>500){
+            map.put("message","内容长度大于超过500");
             return map;
         }
         Date now=new Date();

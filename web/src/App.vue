@@ -17,7 +17,10 @@ export default{
 
 <style>
 body{
-  background-image:url("@/assets/images/薇尔莉特.jpeg");
+  background-image:url("@/assets/images/violet.jpeg");
   background-size:cover;
+}
+body.modal-open{
+    padding-right: 0px!important;
 }
 </style>
