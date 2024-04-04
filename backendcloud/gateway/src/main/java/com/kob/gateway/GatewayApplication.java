@@ -1,19 +1,15 @@
-package com.kob.backend;
+package com.kob.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @RefreshScope
 @EnableDiscoveryClient
-@EnableFeignClients
 @SpringBootApplication
-public class BackendApplication {
-
+public class GatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
+        SpringApplication.run(GatewayApplication.class, args);
     }
-
 }

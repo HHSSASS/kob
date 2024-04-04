@@ -1,0 +1,15 @@
+server:
+  port: 3001
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848 #Nacos作为配置中心地址
+        file-extension: yml #指定yaml格式的配置
+        shared-configs: all-service.yml
+  profiles:
+    active: dev
+
+

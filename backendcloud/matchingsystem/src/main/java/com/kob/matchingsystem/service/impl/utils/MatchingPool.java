@@ -15,10 +15,15 @@ public class MatchingPool extends Thread{
     private static List<Player> players=new ArrayList<>();
     private ReentrantLock lock=new ReentrantLock();
     private static RestTemplate restTemplate;
+    private static StartGameService startGameService;
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate){
         MatchingPool.restTemplate=restTemplate;
+    }
+    @Autowired
+    public void setStartGameService(StartGameService startGameService){
+        MatchingPool.startGameService=startGameService;
     }
     public void addPlayer(Integer userId,Integer rating,Integer botId){
         lock.lock();
@@ -60,7 +65,8 @@ public class MatchingPool extends Thread{
         data.add("a_bot_id",a.getBotId().toString());
         data.add("b_id",b.getUserId().toString());
         data.add("b_bot_id",b.getBotId().toString());
-        restTemplate.postForObject("http://127.0.0.1:3000/pk/startgame/",data,String.class);
+        //restTemplate.postForObject("http://127.0.0.1:3000/pk/startgame/",data,String.class);
+        startGameService.startgame(data);
     }
     private void matchPlayers(){//尝试匹配所有玩家
         //System.out.println("matchplayers "+players.toString());

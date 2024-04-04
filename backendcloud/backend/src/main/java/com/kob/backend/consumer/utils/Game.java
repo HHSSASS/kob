@@ -26,6 +26,7 @@ public class Game extends Thread{
     private String status="playing";//playing->finished
     private String winner="";//all平局;A;B
 
+
     public Game(String uuid,Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB,Bot botB) {
         this.uuid=uuid;
         this.rows = rows;
@@ -149,7 +150,8 @@ public class Game extends Thread{
         data.add("user_id",player.getId().toString());
         data.add("bot_code",player.getBotCode());
         data.add("input",getInput(player));
-        WebSocketServer.restTemplate.postForObject("http://127.0.0.1:3002/bot/add/",data,String.class);
+        //WebSocketServer.restTemplate.postForObject("http://127.0.0.1:3002/bot/add/",data,String.class);
+        WebSocketServer.botService.addBot(data);
     }
     private void sendReceiveMove(Player player){
         JSONObject resp=new JSONObject();

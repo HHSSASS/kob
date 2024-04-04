@@ -18,10 +18,15 @@ import java.util.function.Supplier;
 public class Consumer extends Thread{
     private Bot bot;
     private static RestTemplate restTemplate;
+    private static ReceiveMoveService receiveMoveService;
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate){
         Consumer.restTemplate=restTemplate;
+    }
+    @Autowired
+    public void setReceiveMoveService(ReceiveMoveService receiveMoveService){
+        Consumer.receiveMoveService=receiveMoveService;
     }
     public void startTimeout(long timeout,Bot bot){
         this.bot=bot;
@@ -61,6 +66,7 @@ public class Consumer extends Thread{
         data.add("uuid",bot.uuid);
         data.add("user_id",bot.getUserId().toString());
         data.add("direction",direction.toString());
-        restTemplate.postForObject("http://127.0.0.1:3000/pk/receivebotmove/",data,String.class);
+        //restTemplate.postForObject("http://127.0.0.1:3000/pk/receivebotmove/",data,String.class);
+        receiveMoveService.receiveBotMove(data);
     }
 }

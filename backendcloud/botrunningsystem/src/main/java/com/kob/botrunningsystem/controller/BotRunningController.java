@@ -4,6 +4,7 @@ import com.kob.botrunningsystem.service.BotRunningService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ public class BotRunningController {
     private BotRunningService botRunningService;
 
     @PostMapping("/bot/add/")
-    public String addBot(@RequestParam MultiValueMap<String,String> data){
+    public String addBot(@RequestBody MultiValueMap<String,String> data){
         String uuid= data.getFirst("uuid");
         Integer userId=Integer.parseInt(Objects.requireNonNull(data.getFirst("user_id")));
         String botCode =data.getFirst("bot_code");

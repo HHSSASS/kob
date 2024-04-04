@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/account/qq/applyurl/",
                         "/api/user/account/qq/applyinfo/"
                 ).permitAll()
-                .antMatchers("/pk/startgame/","/pk/receivebotmove/").hasIpAddress("127.0.0.1")
+                .antMatchers("/pk/startgame/","/pk/receivebotmove/").hasIpAddress("172.17.0.2")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
 
