@@ -8,10 +8,7 @@ import com.kob.backend.pojo.User;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Game extends Thread{
@@ -145,13 +142,19 @@ public class Game extends Thread{
         }
         if(player.getBotId().equals(-1)) return;
 
-        MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
-        data.add("uuid",uuid);
-        data.add("user_id",player.getId().toString());
-        data.add("bot_code",player.getBotCode());
-        data.add("input",getInput(player));
-        //WebSocketServer.restTemplate.postForObject("http://127.0.0.1:3002/bot/add/",data,String.class);
-        WebSocketServer.botService.addBot(data);
+//        MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
+//        data.add("uuid",uuid);
+//        data.add("user_id",player.getId().toString());
+//        data.add("bot_code",player.getBotCode());
+//        data.add("input",getInput(player));
+//        WebSocketServer.restTemplate.postForObject("http://127.0.0.1:3006/bot/add/",data,String.class);
+//        WebSocketServer.botService.addBot(data);
+        Map<String,String> data=new HashMap<>();
+        data.put("uuid",uuid);
+        data.put("user_id",player.getId().toString());
+        data.put("bot_code",player.getBotCode());
+        data.put("input",getInput(player));
+        WebSocketServer.rocketMQTemplate.convertAndSend("bot",data);
     }
     private void sendReceiveMove(Player player){
         JSONObject resp=new JSONObject();

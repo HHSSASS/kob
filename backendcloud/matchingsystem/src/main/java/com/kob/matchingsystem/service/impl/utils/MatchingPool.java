@@ -65,7 +65,7 @@ public class MatchingPool extends Thread{
         data.add("a_bot_id",a.getBotId().toString());
         data.add("b_id",b.getUserId().toString());
         data.add("b_bot_id",b.getBotId().toString());
-        //restTemplate.postForObject("http://127.0.0.1:3000/pk/startgame/",data,String.class);
+        //restTemplate.postForObject("http://127.0.0.1:3001/pk/startgame/",data,String.class);
         startGameService.startgame(data);
     }
     private void matchPlayers(){//尝试匹配所有玩家

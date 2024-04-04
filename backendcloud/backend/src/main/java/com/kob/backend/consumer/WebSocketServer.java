@@ -10,6 +10,7 @@ import com.kob.backend.mapper.UserMapper;
 import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.User;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -37,6 +38,7 @@ public class WebSocketServer {
     public static RestTemplate restTemplate;
     public static MatchService matchService;
     public static BotService botService;
+    public static RocketMQTemplate rocketMQTemplate;
     public Game game=null;
 
     private boolean connected=false;
@@ -65,6 +67,10 @@ public class WebSocketServer {
     @Autowired
     public void setBotService(BotService botService){
         WebSocketServer.botService=botService;
+    }
+    @Autowired
+    public void setRocketMQTemplate(RocketMQTemplate rocketMQTemplate){
+        WebSocketServer.rocketMQTemplate=rocketMQTemplate;
     }
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
@@ -121,7 +127,7 @@ public class WebSocketServer {
             users.remove(this.user.getId());
             MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
             data.add("user_id",this.user.getId().toString());
-            //restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
+            //restTemplate.postForObject("http://127.0.0.1:3005/player/remove/",data,String.class);
             matchService.removePlayer(data);
             if(game!=null){
                 if(game.getPlayerA().getId().equals(user.getId())){
@@ -215,14 +221,14 @@ public class WebSocketServer {
         data.add("user_id",this.user.getId().toString());
         data.add("rating",this.user.getRating().toString());
         data.add("bot_id",botId.toString());
-        //restTemplate.postForObject("http://127.0.0.1:3001/player/add/",data,String.class);
+        //restTemplate.postForObject("http://127.0.0.1:3005/player/add/",data,String.class);
         matchService.addPlayer(data);
     }
     private void stopMatching(){
         //System.out.println("stopmatching!");
         MultiValueMap<String,String> data=new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
-        //restTemplate.postForObject("http://127.0.0.1:3001/player/remove/",data,String.class);
+        //restTemplate.postForObject("http://127.0.0.1:3005/player/remove/",data,String.class);
         matchService.removePlayer(data);
     }
     private void move(int direction){
